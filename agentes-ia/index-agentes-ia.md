@@ -1,8 +1,7 @@
-# Agentes IA
+# Agentes Ia
 
 **Creado:** 21 May 2026
-**Descripción:** Patrones de diseño y implementación de agentes inteligentes con LLMs
-**Archivos:** 0
+**Archivos:** 1
 
 ---
 
@@ -10,9 +9,8 @@
 
 | Archivo | Descripción | Fecha |
 |---|---|---|
-| *No hay archivos todavía* | — | — |
-
+| [patrones-fundamentales.md](./patrones-fundamentales.md) | patrones fundamentales | — |
 
 ---
 
-*Usa este tema para documentar tu aprendizaje sobre Agentes IA.*
+*Usa este tema para documentar tu aprendizaje sobre Agentes Ia.*
