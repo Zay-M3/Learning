@@ -1,8 +1,7 @@
-# Ingenieria de Requisitos
+# Ingenieria De Requisitos
 
 **Creado:** 22 May 2026
-**Descripción:** Principios, técnicas y buenas prácticas para elicitar, analizar y documentar requisitos de software
-**Archivos:** 0
+**Archivos:** 1
 
 ---
 
@@ -10,9 +9,8 @@
 
 | Archivo | Descripción | Fecha |
 |---|---|---|
-| *No hay archivos todavía* | — | — |
-
+| [principios-fundamentales.md](./principios-fundamentales.md) | principios fundamentales | — |
 
 ---
 
-*Usa este tema para documentar tu aprendizaje sobre Ingenieria de Requisitos.*
+*Usa este tema para documentar tu aprendizaje sobre Ingenieria De Requisitos.*
