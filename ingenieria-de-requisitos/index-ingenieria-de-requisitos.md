@@ -1,7 +1,7 @@
 # Ingenieria De Requisitos
 
 **Creado:** 22 May 2026
-**Archivos:** 2
+**Archivos:** 3
 
 ---
 
@@ -11,6 +11,7 @@
 |---|---|---|
 | [historias-de-usuario.md](./historias-de-usuario.md) | historias de usuario | — |
 | [principios-fundamentales.md](./principios-fundamentales.md) | principios fundamentales | — |
+| [tecnicas-de-elicitacion.md](./tecnicas-de-elicitacion.md) | tecnicas de elicitacion | — |
 
 ---
 
