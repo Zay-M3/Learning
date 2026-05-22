@@ -4,96 +4,76 @@ Formatos y buenas practicas para escribir historias de usuario que el equipo y e
 
 ## Formato basico
 
-
-
-Opcionalmente se puede agregar:
-
-
+Como [tipo de usuario]
+quiero [accion]
+para [beneficio/valor]
 
 ## Ejemplos por dominio
 
 ### E-commerce / Ventas
 
-**Como** vendedor
-**Quiero** ver la lista de productos mas vendidos del mes
-**Para** identificar que reabastecer y que promover
+Como vendedor
+quiero ver la lista de productos mas vendidos del mes
+para identificar que reabastecer y que promover
 
 ---
 
-**Dado que** el inventario tiene menos de 10 unidades de un producto
-**Cuando** un cliente intenta agregar ese producto al carrito
-**Entonces** mostrar una alerta de "stock bajo" y sugerir productos similares
+Dado que el inventario tiene menos de 10 unidades
+cuando un cliente agrega ese producto al carrito
+entonces mostrar alerta de stock bajo y sugerir similares
 
 ---
 
-### Agente de atencion al cliente (tu caso)
+### Agente de atencion al cliente
 
-**Como** cliente que hace una pregunta por WhatsApp
-**Quiero** recibir respuesta en menos de 30 segundos
-**Para** no esperar y resolver mi problema rapido
+Como cliente que pregunta por WhatsApp
+quiero recibir respuesta en menos de 30 segundos
+para no esperar y resolver rapido
 
 ---
 
-**Como** agente de soporte
-**Quiero** ver el historial de conversaciones del cliente
-**Para** no pedir la misma informacion dos veces
+Como agente de soporte
+quiero ver el historial del cliente
+para no pedir la misma informacion dos veces
 
 ---
 
 ### Sistema de inventario / Logistica
 
-**Como** auxiliar de bodega
-**Quiero** registrar la entrada de productos con codigo de barras
-**Para** no escribir mal las referencias y mantener el inventario actualizado
+Como auxiliar de bodega
+quiero registrar entrada de productos con codigo de barras
+para no escribir mal las referencias
 
 ---
 
-## Reglas de una buena historia de usuario
+## Reglas de una buena historia
 
-1. **Independendiente** — no depende de otra historia para ser implementada
-2. **Negociable** — el detalle se ajusta en conversacion con el equipo
-3. **Valiosa** — aporta valor real al usuario final, no solo al tecnico
-4. **Estimable** — el equipo puede decir cuanto cuesta en tiempo
-5. **Pequena** — se puede completar en 1-2 dias maximo
+1. Independiente — no depende de otra historia
+2. Negociable — el detalle se ajusta en conversacion
+3. Valiosa — aporta valor al usuario final
+4. Estimable — el equipo puede decir cuanto cuesta
+5. Pequena — se completa en 1-2 dias maximo
 
 ## Criterios de aceptacion
 
-Cada historia necesita criterios de aceptacion claros:
+Cada historia necesita criterios claros:
 
+- El campo de busqueda acepta minimo 3 caracteres
+- Los resultados aparecen en menos de 2 segundos
+- Si no hay resultados, se muestra mensaje claro
+- El historial se guarda aunque el usuario cierre la app
 
+## Tallas
 
-Los criterios de aceptacion deben ser:
-- **Verificables** — se puede probar si se cumplen o no
-- **Objetivos** — no hay espacio para interpretacion
-- **Completos** — cubren el happy path y los casos borde
-
-## Errores comunes
-
-**ERROR:** "El sistema debe ser rapido"
-**CORRECCION:** "El sistema debe responder en menos de 3 segundos con hasta 500 usuarios simultaneos"
-
----
-
-**ERROR:** "Como usuario quiero un dashboard"
-**CORRECCION:** "Como gerente de ventas quiero ver las ventas del mes por region para identificar que zonas necesitan atencion"
-
----
-
-**ERROR:** "El sistema debe ser seguro"
-**CORRECCION:** "Solo usuarios autenticados pueden ver datos de otros usuarios. Los passwords se almacenan con bcrypt. No hay logs que expongan tokens de sesion."
-
-## Tallas (Sprints / Iteraciones)
-
-| Tamano | Tiempo estimado | Descripcion |
+| Tamano | Tiempo | Descripcion |
 |---|---|---|
-| **XS** | 1-4 horas | Un campo, un boton, un texto |
-| **S** | 1-2 dias | Un formulario simple, una validacion |
-| **M** | 3-5 dias | Varias pantallas interconectadas |
-| **L** | 1-2 semanas | Un modulo completo con sus casos borde |
-| **XL** | 3-4 semanas | Requiere separarse en varias historias |
+| XS | 1-4 horas | Un campo, un boton |
+| S | 1-2 dias | Un formulario simple |
+| M | 3-5 dias | Varias pantallas |
+| L | 1-2 semanas | Un modulo completo |
 
-Si una historia es mayor a L, sedivide en historias mas pequenas.
+Si una historia es mayor a L, se divide.
 
 ## Siguiente paso
 
-Ver: tecnicas-de-elicitacion.md para aprender como extraer las historias reales del cliente.
+Ver: tecnicas-de-elicitacion.md
