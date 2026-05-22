@@ -242,3 +242,48 @@ El cliente no recibe "todo o nada" al final. Va probando y corrigiendo en el cam
 ## Siguiente paso
 
 Ver: trazabilidad-de-requisitos.md para aprender como seguir cada requisito desde que se pide hasta que se construye.
+
+---
+
+## Fuentes y Referencias
+
+La informacion de este documento se basa en:
+
+1. **ISTQB — International Software Testing Qualifications Board**
+   - Estandar global para testing de software y criteria de aceptacion
+   - https://www.istqb.org/
+
+2. **Dan North — "Introducing BDD" (2009)**
+   - Articulo donde introdujo el formato Given-When-Then
+   - https://dannorth.net/introducing-bdd/
+
+3. **Mike Cohn — "User Stories Applied: For Agile Software Development" (2004)**
+   - Estandar de la industria para historias de usuario y criteria de aceptacion
+   - Referencia central en la industria
+
+4. **Atlassian — Documentacion de Agile**
+   - Guia practica sobre como escribir criteria de aceptacion
+   - https://www.atlassian.com/agile/project-management/user-stories
+
+5. **Roman Pichler — Product Ownership**
+   - Experticia en requirements y priorizacion
+   - https://www.romanpichler.com/
+
+6. **ISO/IEC 25010 (2011)**
+   - Estandar internacional de calidad de producto de software
+   - Define charakteristicas de requisitos no funcionales
+
+7. **Brian Marick — "Agile Testing Directions"**
+   - Pruebas en metodologias agiles y criteria de aceptacion
+   - https://www.testingexcellence.com/
+
+8. **Ministry of Testing**
+   - Comunidad global de testing y calidad de software
+   - https://www.ministryoftesting.com/
+
+## Para profundizar
+
+- Busca en YouTube: "acceptance criteria examples" hay muchos videos practicos
+- El libro "Specification by Example" de Gojko Adzic — casos de prueba derivados de examples reales
+- El libro "Driving Technical Change" de Terrence Ryan — como vender ideas tecnicas a equipos
+
