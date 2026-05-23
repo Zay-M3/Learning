@@ -1,7 +1,7 @@
 # Agentes Ia
 
 **Creado:** 23 May 2026
-**Archivos:** 2
+**Archivos:** 3
 
 ---
 
@@ -9,6 +9,7 @@
 
 | Archivo | Descripción | Fecha |
 |---|---|---|
+| [background-task-ack-whatsapp-webhook.md](./background-task-ack-whatsapp-webhook.md) | background task ack whatsapp webhook | — |
 | [patrones-fundamentales.md](./patrones-fundamentales.md) | patrones fundamentales | — |
 | [patrones-system-prompt.md](./patrones-system-prompt.md) | patrones system prompt | — |
 
