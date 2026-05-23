@@ -1,7 +1,7 @@
 # Agentes Ia
 
-**Creado:** 21 May 2026
-**Archivos:** 1
+**Creado:** 23 May 2026
+**Archivos:** 2
 
 ---
 
@@ -10,6 +10,7 @@
 | Archivo | Descripción | Fecha |
 |---|---|---|
 | [patrones-fundamentales.md](./patrones-fundamentales.md) | patrones fundamentales | — |
+| [patrones-system-prompt.md](./patrones-system-prompt.md) | patrones system prompt | — |
 
 ---
 
