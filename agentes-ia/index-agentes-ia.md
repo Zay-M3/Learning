@@ -1,7 +1,7 @@
 # Agentes Ia
 
 **Creado:** 23 May 2026
-**Archivos:** 4
+**Archivos:** 5
 
 ---
 
@@ -13,6 +13,7 @@
 | [patrones-fundamentales.md](./patrones-fundamentales.md) | patrones fundamentales de agentes IA (ReAct, Plan+Execute, ToT, Reflexión) | — |
 | [patrones-system-prompt.md](./patrones-system-prompt.md) | patrones de system prompt para agentes | — |
 | [rewoo-pattern.md](./rewoo-pattern.md) | patrón ReWOO: Planificador → Trabajador → Solucionador | Mayo 2026 |
+| [seguridad-agentes-ia.md](./seguridad-agentes-ia.md) | vectores de ataque y medidas de mitigación para agentes IA (basado en IBM) | Mayo 2026 |
 
 ---
 
