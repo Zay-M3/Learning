@@ -1,7 +1,7 @@
 # Agentes Ia
 
 **Creado:** 23 May 2026
-**Archivos:** 3
+**Archivos:** 4
 
 ---
 
@@ -10,8 +10,9 @@
 | Archivo | Descripción | Fecha |
 |---|---|---|
 | [background-task-ack-whatsapp-webhook.md](./background-task-ack-whatsapp-webhook.md) | background task ack whatsapp webhook | — |
-| [patrones-fundamentales.md](./patrones-fundamentales.md) | patrones fundamentales | — |
-| [patrones-system-prompt.md](./patrones-system-prompt.md) | patrones system prompt | — |
+| [patrones-fundamentales.md](./patrones-fundamentales.md) | patrones fundamentales de agentes IA (ReAct, Plan+Execute, ToT, Reflexión) | — |
+| [patrones-system-prompt.md](./patrones-system-prompt.md) | patrones de system prompt para agentes | — |
+| [rewoo-pattern.md](./rewoo-pattern.md) | patrón ReWOO: Planificador → Trabajador → Solucionador | Mayo 2026 |
 
 ---
 
