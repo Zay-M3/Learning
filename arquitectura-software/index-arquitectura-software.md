@@ -13,6 +13,7 @@
 | [serendipia-en-arquitectura.md](./serendipia-en-arquitectura.md) | Cultivar innovación, AI como espejo del diseño, feedback |
 | [estilos-arquitectura.md](./estilos-arquitectura.md) | Progresión monolito → modular → microservicios → eventos |
 | [monolito.md](./monolito.md) | Qué es, ventajas, desventajas, noisy neighbor, cuándo considerarlo |
+| [arquitectura-orientada-servicios.md](./arquitectura-orientada-servicios.md) | Contratos, SOAP, OpenAPI, Swagger, WSDL, regla sin contrato no hay comunicación |
 | [cliente-servidor-modalidad.md](./cliente-servidor-modalidad.md) | Cliente rico vs ligero, conexión bidireccional, fundamentos |
 
 ---
