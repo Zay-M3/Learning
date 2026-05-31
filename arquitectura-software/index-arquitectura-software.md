@@ -17,6 +17,7 @@
 | [arquitectura-orientada-eventos.md](./arquitectura-orientada-eventos.md) | Eventos, productores, consumidores, broker, DDD, consistencia eventual |
 | [microservicios.md](./microservicios.md) | Servicios independientes, contratos, costos, CQRS, comunicación síncrona/asíncrona |
 | [solid-principles.md](./solid-principles.md) | Los 5 principios SOLID con ejemplos en Python — SRP, OCP, LSP, ISP, DIP |
+| [arquitectura-limpia.md](./arquitectura-limpia.md) | Círculos concéntricos, dependencias hacia adentro, entidades, casos de uso, adaptadores |
 | [cliente-servidor-modalidad.md](./cliente-servidor-modalidad.md) | Cliente rico vs ligero, conexión bidireccional, fundamentos |
 
 ---
