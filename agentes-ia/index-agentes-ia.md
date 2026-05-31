@@ -14,6 +14,13 @@
 | [patrones-system-prompt.md](./patrones-system-prompt.md) | patrones de system prompt para agentes | — |
 | [rewoo-pattern.md](./rewoo-pattern.md) | patrón ReWOO: Planificador → Trabajador → Solucionador | Mayo 2026 |
 | [seguridad-agentes-ia.md](./seguridad-agentes-ia.md) | vectores de ataque y medidas de mitigación para agentes IA (basado en IBM) | Mayo 2026 |
+| [elevenlabs/](./elevenlabs/) | documentación de ElevenLabs: agentes de voz con Twilio, outbound calls, tools, webhooks | Mayo 2026 |
+
+---
+
+## Subcarpetas
+
+- [elevenlabs/](./elevenlabs/) — Agentes de voz ElevenLabs con Twilio
 
 ---
 
