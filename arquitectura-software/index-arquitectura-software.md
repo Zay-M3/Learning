@@ -14,6 +14,7 @@
 | [estilos-arquitectura.md](./estilos-arquitectura.md) | Progresión monolito → modular → microservicios → eventos |
 | [monolito.md](./monolito.md) | Qué es, ventajas, desventajas, noisy neighbor, cuándo considerarlo |
 | [arquitectura-orientada-servicios.md](./arquitectura-orientada-servicios.md) | Contratos, SOAP, OpenAPI, Swagger, WSDL, regla sin contrato no hay comunicación |
+| [arquitectura-orientada-eventos.md](./arquitectura-orientada-eventos.md) | Eventos, productores, consumidores, broker, DDD, consistencia eventual |
 | [cliente-servidor-modalidad.md](./cliente-servidor-modalidad.md) | Cliente rico vs ligero, conexión bidireccional, fundamentos |
 
 ---
