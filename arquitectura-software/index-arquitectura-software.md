@@ -15,6 +15,7 @@
 | [monolito.md](./monolito.md) | Qué es, ventajas, desventajas, noisy neighbor, cuándo considerarlo |
 | [arquitectura-orientada-servicios.md](./arquitectura-orientada-servicios.md) | Contratos, SOAP, OpenAPI, Swagger, WSDL, regla sin contrato no hay comunicación |
 | [arquitectura-orientada-eventos.md](./arquitectura-orientada-eventos.md) | Eventos, productores, consumidores, broker, DDD, consistencia eventual |
+| [microservicios.md](./microservicios.md) | Servicios independientes, contratos, costos, CQRS, comunicación síncrona/asíncrona |
 | [cliente-servidor-modalidad.md](./cliente-servidor-modalidad.md) | Cliente rico vs ligero, conexión bidireccional, fundamentos |
 
 ---
