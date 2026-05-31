@@ -198,6 +198,5 @@ Redes informales de intercambio de conocimiento.
 
 - [ ] ADR (Architectural Decision Records) — documentar decisiones
 - [ ] C4 Model — cómo usarlo para comunicar arquitectura
-- [ ] Patrones arquitectónicos específicos (microservicios, monolith, event-driven)
 - [ ] Métricas de arquitectura en código
 - [ ] TOGAF — cuándo y cómo aplicarlo
