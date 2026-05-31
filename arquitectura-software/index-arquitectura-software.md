@@ -11,7 +11,8 @@
 |---|---|
 | [fundamentos-arquitectura.md](./fundamentos-arquitectura.md) | Contexto, responsabilidades, malas prácticas, patrones, comunicación |
 | [serendipia-en-arquitectura.md](./serendipia-en-arquitectura.md) | Cultivar innovación, AI como espejo del diseño, feedback |
-| [estilos-arquitectura.md](./estilos-arquitectura.md) | Monolito, modular, microservicios, eventos — progresión y contexto |
+| [estilos-arquitectura.md](./estilos-arquitectura.md) | Progresión monolito → modular → microservicios → eventos |
+| [monolito.md](./monolito.md) | Qué es, ventajas, desventajas, noisy neighbor, cuándo considerarlo |
 | [cliente-servidor-modalidad.md](./cliente-servidor-modalidad.md) | Cliente rico vs ligero, conexión bidireccional, fundamentos |
 
 ---
