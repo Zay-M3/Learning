@@ -20,6 +20,9 @@
 | [arquitectura-limpia.md](./arquitectura-limpia.md) | Círculos concéntricos, dependencias hacia adentro, entidades, casos de uso, adaptadores |
 | [cuando-usar-patrones.md](./cuando-usar-patrones.md) | Cuándo elegir un patrón, dominio primero, no reinventar la rueda, mezclar patrones |
 | [cliente-servidor-modalidad.md](./cliente-servidor-modalidad.md) | Cliente rico vs ligero, conexión bidireccional, fundamentos |
+| [share-nothing.md](./share-nothing.md) | Principio de no compartir estado entre componentes — DB, memoria, CPU propios |
+| [sharding.md](./sharding.md) | Particionar una base de datos grande en shards independientes |
+| [mapreduce.md](./mapreduce.md) | Patrón Map-Shuffle-Reduce para procesamiento distribuido de datos masivos |
 
 ---
 
