@@ -17,6 +17,7 @@
 | [arquitectura-orientada-eventos.md](./arquitectura-orientada-eventos.md) | Eventos, productores, consumidores, broker, DDD, consistencia eventual |
 | [microservicios.md](./microservicios.md) | Servicios independientes, contratos, costos, CQRS, comunicación síncrona/asíncrona |
 | [solid-principles.md](./solid-principles.md) | Los 5 principios SOLID con ejemplos en Python — SRP, OCP, LSP, ISP, DIP |
+| [ley-de-demeter.md](./ley-de-demeter.md) | Ley de Demeter — "no hables con extraños", reducir el acoplamiento entre objetos |
 | [arquitectura-limpia.md](./arquitectura-limpia.md) | Círculos concéntricos, dependencias hacia adentro, entidades, casos de uso, adaptadores |
 | [cuando-usar-patrones.md](./cuando-usar-patrones.md) | Cuándo elegir un patrón, dominio primero, no reinventar la rueda, mezclar patrones |
 | [cliente-servidor-modalidad.md](./cliente-servidor-modalidad.md) | Cliente rico vs ligero, conexión bidireccional, fundamentos |
