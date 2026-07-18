@@ -1,0 +1,46 @@
+---
+import { SESSIONS, type Session } from '../utils/posts.ts';
+import { getPostsBySession, sessionLabel } from '../utils/posts.ts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MarkdownCard from '../components/MarkdownCard.astro';
+
+export async function getStaticPaths() {
+  return SESSIONS.map((session) => ({
+    params: { session },
+  }));
+}
+
+interface Props {
+  session: Session;
+}
+
+const { session: rawSession } = Astro.params;
+const session = rawSession as Session;
+const posts = await getPostsBySession(session);
+---
+<BaseLayout
+  title={sessionLabel(session)}
+  description={`Notas de la sesión ${sessionLabel(session)}`}
+>
+  <section>
+    <nav class="mb-2 text-sm text-zinc-500">
+      <a href="/" class="hover:underline">← Inicio</a>
+    </nav>
+    <h1
+      class="mb-2 text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100"
+    >
+      {sessionLabel(session)}
+    </h1>
+    <p class="mb-8 text-zinc-600 dark:text-zinc-400">
+      {posts.length} {posts.length === 1 ? 'nota' : 'notas'} en esta sesión.
+    </p>
+
+    {posts.length === 0 ? (
+      <p class="text-sm text-zinc-500">Todavía no hay notas en esta sesión.</p>
+    ) : (
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {posts.map((post) => <MarkdownCard post={post} />)}
+      </div>
+    )}
+  </section>
+</BaseLayout>

@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Buscar" description="Buscar en todas las notas">
+  <section>
+    <h1
+      class="mb-2 text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100"
+    >
+      Buscar
+    </h1>
+    <p class="mb-8 text-zinc-600 dark:text-zinc-400">
+      Buscá por palabra clave en todas las notas, sesiones y tags.
+    </p>
+
+    <!-- Contenedor Pagefind UI. El script lo inicializa si el índice existe. -->
+    <div id="pagefind__search"></div>
+
+    <noscript>
+      <p class="mt-4 text-sm text-zinc-500">
+        La búsqueda requiere JavaScript habilitado.
+      </p>
+    </noscript>
+  </section>
+
+  <!--
+    Pagefind sólo existe tras `npm run build` en `dist/pagefind/`.
+    Si todavía no se generó el índice (p.ej. en `astro dev`), mostramos un mensaje.
+  -->
+  <script>
+    async function initPagefind() {
+      try {
+        // @ts-ignore — Pagefind se carga dinámicamente
+        const pagefind = await import(/* @vite-ignore */ '/pagefind/pagefind.js');
+        await pagefind.options({ excerptLength: 30 });
+        await pagefind.search('');
+        pagefind.initSearch({
+          element: '#pagefind__search',
+          resetStyles: false,
+          showImages: false,
+          showEmptyFilters: false,
+        });
+      } catch (e) {
+        const host = document.getElementById('pagefind__search');
+        if (host) {
+          host.innerHTML =
+            '<p class="rounded-md border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-200">El índice de búsqueda aún no está disponible. Ejecutá <code class="font-mono">npm run build</code> para generarlo.</p>';
+        }
+      }
+    }
+    document.addEventListener('DOMContentLoaded', initPagefind);
+  </script>
+</BaseLayout>

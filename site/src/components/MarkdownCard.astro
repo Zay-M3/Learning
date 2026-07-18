@@ -1,0 +1,60 @@
+---
+import type { Post } from '../utils/posts.ts';
+import { sessionLabel, getTitle } from '../utils/posts.ts';
+
+interface Props {
+  post: Post;
+  compact?: boolean;
+}
+
+const { post, compact = false } = Astro.props;
+const { description, session, tags, date } = post.data;
+const title = getTitle(post);
+const url = `/${post.id}`;
+const dateStr = date
+  ? date.toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+  : null;
+---
+<article
+  class="group rounded-lg border border-zinc-200 bg-white p-5 transition-all hover:scale-[1.01] hover:border-blue-400 hover:shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+>
+  <a href={url} class="block space-y-2">
+    <div class="flex items-center gap-2 text-xs">
+      <span
+        class="rounded-full bg-blue-50 px-2 py-0.5 font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300"
+      >
+        {sessionLabel(session)}
+      </span>
+      {dateStr && (
+        <time class="text-zinc-500 dark:text-zinc-400" datetime={date?.toISOString()}>
+          {dateStr}
+        </time>
+      )}
+    </div>
+    <h3
+      class={`font-semibold tracking-tight text-zinc-900 group-hover:text-blue-700 dark:text-zinc-100 dark:group-hover:text-blue-300 ${compact ? 'text-base' : 'text-lg'}`}
+    >
+      {title}
+    </h3>
+    {!compact && description && (
+      <p class="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-2">
+        {description}
+      </p>
+    )}
+    {!compact && tags.length > 0 && (
+      <div class="flex flex-wrap gap-1 pt-1">
+        {tags.slice(0, 4).map((tag) => (
+          <span
+            class="rounded-md bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
+          >
+            #{tag}
+          </span>
+        ))}
+      </div>
+    )}
+  </a>
+</article>
