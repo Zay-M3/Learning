@@ -314,6 +314,19 @@ def convert_notebook(nb_path: Path, session: str) -> tuple[Path, str]:
     body, _resources = exporter.from_notebook_node(nb)
     body = embed_external_resources(body)
 
+    # Inyectar botón "Volver" justo después del <body>
+    back_href = f"/{session}/" if session else "/"
+    back_button = (
+        f'<div style="position:fixed;top:0;left:0;right:0;z-index:9999;'
+        f'background:#fafafa;border-bottom:1px solid #e4e4e7;padding:0.75rem 1.5rem;'
+        f'font-family:system-ui,-apple-system,sans-serif;font-size:0.875rem">'
+        f'<a href="{back_href}" style="color:#2563eb;text-decoration:none;font-weight:500">'
+        f'← Volver a {session or "inicio"}</a>'
+        f'</div>'
+        f'<div style="height:3rem"></div>'  # Spacer para que el contenido no quede tapado
+    )
+    body = re.sub(r"(<body[^>]*>)", r"\1" + back_button, body, count=1)
+
     with open(out_file, "w", encoding="utf-8") as f:
         f.write(body)
 
@@ -327,10 +340,11 @@ def convert_notebook(nb_path: Path, session: str) -> tuple[Path, str]:
 # ---------------------------------------------------------------------------
 
 
-def render_code_to_html(filepath: Path, language: str) -> tuple[str, str]:
+def render_code_to_html(filepath: Path, language: str, session: str = "") -> tuple[str, str]:
     """
     Renderiza un archivo de código a HTML con Pygments.
     Devuelve (body_html, page_completa).
+    `session` se usa para construir el link "Volver" a la página de sesión.
     """
     from pygments import highlight
     from pygments.formatters import HtmlFormatter
@@ -359,6 +373,8 @@ def render_code_to_html(filepath: Path, language: str) -> tuple[str, str]:
     body = highlight(code, lexer, formatter)
 
     size_kb = filepath.stat().st_size / 1024
+    # Link "Volver" apunta a la página de sesión, no al directorio padre
+    back_href = f"/{session}/" if session else "/"
     page = f"""<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -377,7 +393,7 @@ def render_code_to_html(filepath: Path, language: str) -> tuple[str, str]:
   </style>
 </head>
 <body>
-  <a href="../" class="back">← Volver</a>
+  <a href="{back_href}" class="back">← Volver a {session or 'inicio'}</a>
   <h1>{filepath.name}</h1>
   <p class="meta">
     Lenguaje: <code>{lexer.name}</code>
@@ -439,7 +455,7 @@ def process_session(session: str) -> list[dict]:
         out_file = out_dir / "index.html"
         out_dir.mkdir(parents=True, exist_ok=True)
 
-        _body, page = render_code_to_html(f, language)
+        _body, page = render_code_to_html(f, language, session)
         out_file.write_text(page, encoding="utf-8")
 
         size_kb = round(f.stat().st_size / 1024, 1)
