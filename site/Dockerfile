@@ -6,7 +6,8 @@ FROM node:22-alpine AS builder
 
 # nbconvert requiere Python 3 + pip (para convertir .ipynb → HTML estático)
 RUN apk add --no-cache python3 py3-pip
-RUN pip3 install --no-cache-dir --break-system-packages nbconvert jupyter-client ipykernel
+RUN pip3 install --no-cache-dir --break-system-packages \
+    nbconvert jupyter-client ipykernel pygments
 
 WORKDIR /app
 
@@ -28,10 +29,8 @@ COPY ingenieria-de-software/ /repo-sessions/ingenieria-de-software/
 # Variable de entorno: sync-content.mjs usa esto como REPO_ROOT alternativo
 ENV LEARNING_REPO_ROOT=/repo-sessions
 RUN node scripts/sync-content.mjs && \
-    python3 scripts/notebooks.py && \
-    npm run build && \
-    # Eliminar el HTML de notebooks del dist (lo servimos desde public/)
-    rm -rf dist/algoritmia/notebooks
+    python3 scripts/assets.py && \
+    npm run build
 
 # Etapa 2: nginx
 FROM nginx:1.27-alpine

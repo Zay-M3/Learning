@@ -21,43 +21,73 @@ interface NotebookMeta {
   slug: string;
   title: string;
   filename: string;
-  description: string;
+  description?: string;
   url: string;
   cells: number;
+  size_kb: number;
+  language: string;
 }
 
-interface ScriptMeta {
-  type: 'script';
+interface FileMeta {
+  type: 'file';
+  slug: string;
+  title: string;
+  filename: string;
+  language: string;
+  lexer?: string;
+  url: string;
+  size_kb: number;
+  extension: string;
+}
+
+interface BinaryMeta {
+  type: 'binary';
+  slug: string;
   title: string;
   filename: string;
   url: string;
   size_kb: number;
+  extension: string;
 }
 
-type AssetMeta = NotebookMeta | ScriptMeta;
+type AssetMeta = NotebookMeta | FileMeta | BinaryMeta;
 
 const { session: rawSession } = Astro.params;
 const session = rawSession as Session;
 const posts = await getPostsBySession(session);
 
-// Solo algoritmia tiene notebooks y scripts
+// Leer _index.json de la sesión (lo genera assets.py)
 let assets: AssetMeta[] = [];
-if (session === 'algoritmia') {
-  try {
-    const indexPath = path.resolve(
-      process.cwd(),
-      'public/algoritmia/notebooks/_index.json',
-    );
-    const raw = await fs.readFile(indexPath, 'utf-8');
-    assets = JSON.parse(raw) as AssetMeta[];
-  } catch (e) {
-    // _index.json puede no existir si el script no se ejecutó
-    assets = [];
-  }
+try {
+  const indexPath = path.resolve(
+    process.cwd(),
+    `public/${session}/_index.json`,
+  );
+  const raw = await fs.readFile(indexPath, 'utf-8');
+  assets = JSON.parse(raw) as AssetMeta[];
+} catch (e) {
+  // _index.json puede no existir si el script no se ejecutó o no hay assets
+  assets = [];
 }
 
 const notebooks = assets.filter((a): a is NotebookMeta => a.type === 'notebook');
-const scripts = assets.filter((a): a is ScriptMeta => a.type === 'script');
+const files = assets.filter((a): a is FileMeta => a.type === 'file');
+const binaries = assets.filter((a): a is BinaryMeta => a.type === 'binary');
+
+// Emoji de icono según extensión (fallback si el JSON no trae lo que esperamos)
+function iconFor(ext: string): string {
+  const map: Record<string, string> = {
+    '.py': '🐍', '.js': '🟨', '.ts': '🔷', '.jsx': '⚛️', '.tsx': '⚛️',
+    '.rs': '🦀', '.go': '🐹', '.java': '☕', '.c': '©️', '.cpp': '➕',
+    '.rb': '💎', '.php': '🐘', '.sh': '🐚', '.sql': '🗃️',
+    '.html': '🌐', '.css': '🎨', '.json': '📋', '.yaml': '📋', '.yml': '📋',
+    '.toml': '📋', '.xml': '📋', '.md': '📝', '.txt': '📄', '.csv': '📊',
+    '.png': '🖼️', '.jpg': '🖼️', '.jpeg': '🖼️', '.gif': '🖼️', '.svg': '🖼️',
+    '.webp': '🖼️', '.pdf': '📕', '.zip': '🗜️', '.tar': '🗜️', '.gz': '🗜️',
+    '.ipynb': '📓',
+  };
+  return map[ext.toLowerCase()] || '📄';
+}
 ---
 <BaseLayout
   title={sessionLabel(session)}
@@ -84,7 +114,7 @@ const scripts = assets.filter((a): a is ScriptMeta => a.type === 'script');
       </div>
     )}
 
-    {session === 'algoritmia' && notebooks.length > 0 && (
+    {notebooks.length > 0 && (
       <section class="mt-12">
         <h2 class="mb-4 text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
           📓 Notebooks
@@ -107,7 +137,7 @@ const scripts = assets.filter((a): a is ScriptMeta => a.type === 'script');
                 </h3>
               </div>
               <p class="mb-2 text-xs text-zinc-500 dark:text-zinc-400">
-                {nb.filename} · {nb.cells} {nb.cells === 1 ? 'celda' : 'celdas'}
+                {nb.filename} · {nb.cells} {nb.cells === 1 ? 'celda' : 'celdas'} · {nb.size_kb} KB
               </p>
               {nb.description && (
                 <p class="text-sm text-zinc-600 line-clamp-3 dark:text-zinc-400">
@@ -122,28 +152,65 @@ const scripts = assets.filter((a): a is ScriptMeta => a.type === 'script');
       </section>
     )}
 
-    {session === 'algoritmia' && scripts.length > 0 && (
-      <section class="mt-8">
+    {files.length > 0 && (
+      <section class="mt-12">
         <h2 class="mb-4 text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-          📄 Scripts
+          📁 Archivos
         </h2>
-        <div class="space-y-2">
-          {scripts.map((s) => (
+        <p class="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
+          Scripts y archivos de código renderizados con syntax highlighting.
+        </p>
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {files.map((f) => (
             <a
-              href={s.url}
-              download
-              class="flex items-center justify-between gap-4 rounded-lg border border-zinc-200 bg-white p-4 transition hover:border-blue-500 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-blue-500"
+              href={f.url}
+              class="group block rounded-lg border border-zinc-200 bg-white p-4 transition hover:border-blue-500 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-blue-500"
             >
-              <div class="flex items-center gap-3">
-                <span class="inline-flex h-8 w-8 items-center justify-center rounded bg-blue-500 text-sm font-bold text-white">
-                  🐍
+              <div class="mb-2 flex items-center gap-2">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded bg-zinc-100 text-base dark:bg-zinc-800">
+                  {iconFor(f.extension)}
                 </span>
-                <div>
-                  <p class="font-medium text-zinc-900 dark:text-zinc-100">{s.filename}</p>
-                  <p class="text-xs text-zinc-500 dark:text-zinc-400">{s.size_kb} KB</p>
-                </div>
+                <h3 class="text-base font-semibold text-zinc-900 group-hover:text-blue-600 dark:text-zinc-100 dark:group-hover:text-blue-400 break-all">
+                  {f.filename}
+                </h3>
               </div>
-              <span class="text-xs text-blue-600 dark:text-blue-400">Descargar ↓</span>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400">
+                {f.language} · {f.size_kb} KB
+              </p>
+              <p class="mt-2 text-xs text-blue-600 dark:text-blue-400">Ver archivo →</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {binaries.length > 0 && (
+      <section class="mt-12">
+        <h2 class="mb-4 text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+          🖼️ Recursos
+        </h2>
+        <p class="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
+          Archivos binarios (imágenes, PDFs, etc.) disponibles para descarga.
+        </p>
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {binaries.map((b) => (
+            <a
+              href={b.url}
+              download
+              class="group block rounded-lg border border-zinc-200 bg-white p-4 transition hover:border-blue-500 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-blue-500"
+            >
+              <div class="mb-2 flex items-center gap-2">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded bg-zinc-100 text-base dark:bg-zinc-800">
+                  {iconFor(b.extension)}
+                </span>
+                <h3 class="text-base font-semibold text-zinc-900 group-hover:text-blue-600 dark:text-zinc-100 dark:group-hover:text-blue-400 break-all">
+                  {b.filename}
+                </h3>
+              </div>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400">
+                {b.extension.toUpperCase().replace('.', '')} · {b.size_kb} KB
+              </p>
+              <p class="mt-2 text-xs text-blue-600 dark:text-blue-400">Descargar ↓</p>
             </a>
           ))}
         </div>
