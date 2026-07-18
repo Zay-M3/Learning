@@ -7,7 +7,12 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SITE_DIR = path.resolve(__dirname, '..');
-const REPO_ROOT = path.resolve(SITE_DIR, '..');
+// REPO_ROOT: raíz del repo donde viven las carpetas de sesiones.
+// - En local: se infiere desde SITE_DIR/.. (sitio vive en site/ del repo)
+// - En Docker (Dokploy): viene de env var LEARNING_REPO_ROOT (montado en /repo-sessions)
+const REPO_ROOT = process.env.LEARNING_REPO_ROOT
+  ? process.env.LEARNING_REPO_ROOT
+  : path.resolve(SITE_DIR, '..');
 const CONTENT_DIR = path.join(SITE_DIR, 'src', 'content');
 
 const SESSIONS = [
