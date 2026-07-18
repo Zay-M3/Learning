@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MarkdownCard from '../components/MarkdownCard.astro';
+import {
+  SESSIONS,
+  SESSION_LABELS,
+  SESSION_DESCRIPTIONS,
+  getSessionCounts,
+  getAllPosts,
+} from '../utils/posts.ts';
+
+const counts = await getSessionCounts();
+const allPosts = await getAllPosts();
+const latest = allPosts.slice(0, 8);
+---
+<BaseLayout title="Learning">
+  <!-- Hero -->
+  <section class="mb-12">
+    <h1
+      class="mb-3 text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-5xl"
+    >
+      Learning
+    </h1>
+    <p class="text-lg text-zinc-600 dark:text-zinc-400">
+      Notas, patrones y fundamentos de software.
+    </p>
+  </section>
+
+  <!-- Grid de sesiones -->
+  <section class="mb-16">
+    <h2
+      class="mb-6 text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100"
+    >
+      Sesiones
+    </h2>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {SESSIONS.map((s) => (
+        <a
+          href={`/${s}`}
+          class="group rounded-lg border border-zinc-200 bg-white p-5 transition-all hover:scale-[1.01] hover:border-blue-400 hover:shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+        >
+          <div class="mb-2 flex items-center justify-between">
+            <h3
+              class="text-base font-semibold text-zinc-900 group-hover:text-blue-700 dark:text-zinc-100 dark:group-hover:text-blue-300"
+            >
+              {SESSION_LABELS[s]}
+            </h3>
+            <span
+              class="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
+            >
+              {counts[s]} {counts[s] === 1 ? 'nota' : 'notas'}
+            </span>
+          </div>
+          <p class="text-sm text-zinc-600 dark:text-zinc-400">
+            {SESSION_DESCRIPTIONS[s]}
+          </p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Últimos posts -->
+  <section>
+    <div class="mb-6 flex items-end justify-between">
+      <h2
+        class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100"
+      >
+        Últimas notas
+      </h2>
+      <a
+        href="/tags"
+        class="text-sm text-blue-600 hover:underline dark:text-blue-400"
+      >
+        Ver todos los tags →
+      </a>
+    </div>
+    {latest.length === 0 ? (
+      <p class="text-sm text-zinc-500">Todavía no hay notas publicadas.</p>
+    ) : (
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {latest.map((post) => <MarkdownCard post={post} compact={true} />)}
+      </div>
+    )}
+  </section>
+</BaseLayout>

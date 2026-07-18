@@ -1,0 +1,96 @@
+---
+import {
+  SESSIONS,
+  SESSION_LABELS,
+  getSessionCounts,
+  getAllTags,
+} from '../utils/posts.ts';
+
+const counts = await getSessionCounts();
+const tagsMap = await getAllTags();
+const topTags = [...tagsMap.entries()]
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 10);
+---
+<aside
+  id="sidebar"
+  class="hidden lg:block w-64 shrink-0 border-r border-zinc-200 dark:border-zinc-800 bg-zinc-50/40 dark:bg-zinc-900/40"
+>
+  <nav class="sticky top-16 p-6 space-y-8 text-sm">
+    <!-- Inicio / Buscar -->
+    <div>
+      <ul class="space-y-1">
+        <li>
+          <a
+            href="/"
+            class="block rounded-md px-3 py-2 text-zinc-700 hover:bg-zinc-200/60 dark:text-zinc-300 dark:hover:bg-zinc-800/60"
+          >
+            🏠 Inicio
+          </a>
+        </li>
+        <li>
+          <a
+            href="/search"
+            class="block rounded-md px-3 py-2 text-zinc-700 hover:bg-zinc-200/60 dark:text-zinc-300 dark:hover:bg-zinc-800/60"
+          >
+            🔍 Buscar
+          </a>
+        </li>
+        <li>
+          <a
+            href="/tags"
+            class="block rounded-md px-3 py-2 text-zinc-700 hover:bg-zinc-200/60 dark:text-zinc-300 dark:hover:bg-zinc-800/60"
+          >
+            🏷️ Todos los tags
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Sesiones -->
+    <div>
+      <h2
+        class="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400"
+      >
+        Sesiones
+      </h2>
+      <ul class="space-y-1">
+        {SESSIONS.map((s) => (
+          <li>
+            <a
+              href={`/${s}`}
+              class="flex items-center justify-between rounded-md px-3 py-2 text-zinc-700 hover:bg-zinc-200/60 dark:text-zinc-300 dark:hover:bg-zinc-800/60"
+            >
+              <span>{SESSION_LABELS[s]}</span>
+              <span class="text-xs text-zinc-500">{counts[s]}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Tags top -->
+    {topTags.length > 0 && (
+      <div>
+        <h2
+          class="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400"
+        >
+          Tags populares
+        </h2>
+        <ul class="space-y-1">
+          {topTags.map(([tag, n]) => (
+            <li>
+              <a
+                href={`/tags/${encodeURIComponent(tag)}`}
+                class="flex items-center justify-between rounded-md px-3 py-2 text-zinc-700 hover:bg-zinc-200/60 dark:text-zinc-300 dark:hover:bg-zinc-800/60"
+              >
+                <span>#{tag}</span>
+                <span class="text-xs text-zinc-500">{n}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </nav>
+</aside>

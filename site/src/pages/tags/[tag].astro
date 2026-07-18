@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MarkdownCard from '../../components/MarkdownCard.astro';
+import { getAllTags, getPostsByTag } from '../../utils/posts.ts';
+
+export async function getStaticPaths() {
+  const tagsMap = await getAllTags();
+  return [...tagsMap.keys()].map((tag) => ({
+    params: { tag },
+  }));
+}
+
+const { tag } = Astro.params;
+const decodedTag = decodeURIComponent(tag ?? '');
+const posts = await getPostsByTag(decodedTag);
+---
+<BaseLayout
+  title={`#${decodedTag}`}
+  description={`Notas con el tag ${decodedTag}`}
+>
+  <section>
+    <nav class="mb-2 text-sm text-zinc-500">
+      <a href="/tags" class="hover:underline">← Todos los tags</a>
+    </nav>
+    <h1
+      class="mb-2 text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100"
+    >
+      #{decodedTag}
+    </h1>
+    <p class="mb-8 text-zinc-600 dark:text-zinc-400">
+      {posts.length} {posts.length === 1 ? 'nota' : 'notas'} con este tag.
+    </p>
+
+    {posts.length === 0 ? (
+      <p class="text-sm text-zinc-500">No hay notas para este tag.</p>
+    ) : (
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {posts.map((post) => <MarkdownCard post={post} />)}
+      </div>
+    )}
+  </section>
+</BaseLayout>
