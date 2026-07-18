@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "astro dev",
     "sync": "node scripts/sync-content.mjs",
-    "build": "node scripts/sync-content.mjs && astro build && pagefind --site dist",
+    "notebooks": "python3 scripts/notebooks.py",
+    "build": "node scripts/sync-content.mjs && python3 scripts/notebooks.py && astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro"
   },

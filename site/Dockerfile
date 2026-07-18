@@ -3,6 +3,11 @@
 # Esto permite que sync-content.mjs acceda a las carpetas de sesiones
 # (arquitectura-software/, agentes-ia/, etc.) que viven fuera de site/.
 FROM node:22-alpine AS builder
+
+# nbconvert requiere Python 3 + pip (para convertir .ipynb → HTML estático)
+RUN apk add --no-cache python3 py3-pip
+RUN pip3 install --no-cache-dir --break-system-packages nbconvert jupyter-client ipykernel
+
 WORKDIR /app
 
 # Copiar dependencias primero (mejor cache de Docker)
@@ -22,7 +27,11 @@ COPY ingenieria-de-software/ /repo-sessions/ingenieria-de-software/
 
 # Variable de entorno: sync-content.mjs usa esto como REPO_ROOT alternativo
 ENV LEARNING_REPO_ROOT=/repo-sessions
-RUN node scripts/sync-content.mjs && npm run build
+RUN node scripts/sync-content.mjs && \
+    python3 scripts/notebooks.py && \
+    npm run build && \
+    # Eliminar el HTML de notebooks del dist (lo servimos desde public/)
+    rm -rf dist/algoritmia/notebooks
 
 # Etapa 2: nginx
 FROM nginx:1.27-alpine

@@ -3,4 +3,5 @@ dist/
 .astro/
 src/content/
 *.log
-.DS_Store
+.DS_Storescripts/__pycache__/
+*.pyc
