@@ -124,7 +124,7 @@ const binaries = assets.filter((a): a is BinaryMeta => a.type === 'binary');
                 </h3>
               </div>
               <p class="mb-2 text-xs text-zinc-500 dark:text-zinc-400">
-                {nb.filename} · {nb.cells} {nb.cells === 1 ? 'celda' : 'celdas'}
+                {nb.filename} · {nb.cells} {nb.cells === 1 ? 'celda' : 'celdas'} · {nb.size_kb} KB
               </p>
               {nb.description && (
                 <p class="text-sm text-zinc-600 line-clamp-3 dark:text-zinc-400">
@@ -194,7 +194,43 @@ const binaries = assets.filter((a): a is BinaryMeta => a.type === 'binary');
                   <p class="text-xs text-zinc-500 dark:text-zinc-400">{b.size_kb} KB</p>
                 </div>
               </div>
-              <span class="text-xs text-blue-600 dark:text-blue-400">Descargar ↓</span>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400">
+                {f.language} · {f.size_kb} KB
+              </p>
+              <p class="mt-2 text-xs text-blue-600 dark:text-blue-400">Ver archivo →</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {binaries.length > 0 && (
+      <section class="mt-12">
+        <h2 class="mb-4 text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+          🖼️ Recursos
+        </h2>
+        <p class="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
+          Archivos binarios (imágenes, PDFs, etc.) disponibles para descarga.
+        </p>
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {binaries.map((b) => (
+            <a
+              href={b.url}
+              download
+              class="group block rounded-lg border border-zinc-200 bg-white p-4 transition hover:border-blue-500 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-blue-500"
+            >
+              <div class="mb-2 flex items-center gap-2">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded bg-zinc-100 text-base dark:bg-zinc-800">
+                  {iconFor(b.extension)}
+                </span>
+                <h3 class="text-base font-semibold text-zinc-900 group-hover:text-blue-600 dark:text-zinc-100 dark:group-hover:text-blue-400 break-all">
+                  {b.filename}
+                </h3>
+              </div>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400">
+                {b.extension.toUpperCase().replace('.', '')} · {b.size_kb} KB
+              </p>
+              <p class="mt-2 text-xs text-blue-600 dark:text-blue-400">Descargar ↓</p>
             </a>
           ))}
         </div>
