@@ -10,6 +10,7 @@ export const SESSIONS = [
   'algoritmia',
   'ingenieria-de-requisitos',
   'ingenieria-de-software',
+  'Dominios',
 ] as const;
 
 export type Session = (typeof SESSIONS)[number];
@@ -21,6 +22,7 @@ export const SESSION_LABELS: Record<Session, string> = {
   algoritmia: 'Algoritmia',
   'ingenieria-de-requisitos': 'Ingeniería de Requisitos',
   'ingenieria-de-software': 'Ingeniería de Software',
+  Dominios: 'Dominios',
 };
 
 // Descripciones cortas de cada sesión
@@ -33,6 +35,7 @@ export const SESSION_DESCRIPTIONS: Record<Session, string> = {
     'Elicitación, análisis y gestión de requisitos de software.',
   'ingenieria-de-software':
     'Fundamentos, procesos y prácticas de ingeniería de software.',
+  Dominios: 'Investigación de dominios previa a implementación.',
 };
 
 /**
