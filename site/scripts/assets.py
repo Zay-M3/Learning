@@ -122,6 +122,7 @@ SESSIONS: list[str] = [
     "algoritmia",
     "ingenieria-de-requisitos",
     "ingenieria-de-software",
+    "Dominios",
 ]
 
 

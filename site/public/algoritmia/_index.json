@@ -7,7 +7,7 @@
     "description": "# Algoritmia en Python — Ordenamiento y Búsqueda\n\nEn este cuaderno vamos a implementar y comparar 3 algoritmos con `timeit.repeat()` + `min()`\ncomo aprendimos en `time.ipynb`. La idea es **ver** la diferencia entre complejidades\n(O(n), O(log n), O(n²)) en práctica, no solo en teoría.\n\n## Los 3 algoritmos\n\n| # | Algoritmo | Complejidad | Idea |\n|---|-----------|------------|------|\n| 1 | Burbuja | O(n²) | Compara adyacentes y los intercambia si están mal ordenados |\n| 2 | Búsqueda lineal | O(n) | Recorre uno por uno hasta encontrar |\n| 3 | Búsqueda binaria | O(log n) | Divide la lista a la mitad cada vez (requiere lista ORDENADA) |",
     "url": "/algoritmia/notebooks/ordenamiento/",
     "cells": 12,
-    "size_kb": 447.1,
+    "size_kb": 447.0,
     "language": "jupyter"
   },
   {
