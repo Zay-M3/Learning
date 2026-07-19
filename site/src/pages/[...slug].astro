@@ -2,7 +2,7 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TagChip from '../components/TagChip.astro';
-import { sessionLabel, getTitle } from '../utils/posts.ts';
+import { NAMESPACES, getTitle } from '../utils/posts.ts';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
@@ -27,16 +27,55 @@ const dateStr = date
       day: 'numeric',
     })
   : null;
+
+// ¿Pertenece a un namespace-child? (id empieza con "<ns>/<child>/")
+const idParts = post.id.split('/');
+let nsLabel: string | null = null;
+let nsHref: string | null = null;
+let childLabel: string | null = null;
+let childHref: string | null = null;
+
+if (idParts.length >= 3) {
+  const [nsSlug, childSlug] = idParts;
+  const ns = NAMESPACES.find((n) => n.slug === nsSlug);
+  const child = ns?.children.find((c) => c.slug === childSlug);
+  if (ns && child) {
+    nsLabel = ns.label;
+    nsHref = `/${ns.slug}`;
+    childLabel = child.label;
+    childHref = `/${ns.slug}/${child.slug}`;
+  }
+}
 ---
 <BaseLayout title={title} description={description}>
   <article class="mx-auto max-w-3xl">
     <!-- Breadcrumb -->
-    <nav class="mb-4 flex items-center gap-1 text-sm text-zinc-500">
+    <nav class="mb-4 flex flex-wrap items-center gap-1 text-sm text-zinc-500">
       <a href="/" class="hover:text-blue-600 hover:underline">Inicio</a>
-      <span>/</span>
-      <a href={`/${session}`} class="hover:text-blue-600 hover:underline">
-        {sessionLabel(session)}
-      </a>
+      {nsHref && nsLabel && (
+        <>
+          <span>/</span>
+          <a href={nsHref} class="hover:text-blue-600 hover:underline">
+            {nsLabel}
+          </a>
+        </>
+      )}
+      {childHref && childLabel && (
+        <>
+          <span>/</span>
+          <a href={childHref} class="hover:text-blue-600 hover:underline">
+            {childLabel}
+          </a>
+        </>
+      )}
+      {!nsHref && (
+        <>
+          <span>/</span>
+          <a href={`/${session}`} class="hover:text-blue-600 hover:underline">
+            {session}
+          </a>
+        </>
+      )}
       <span>/</span>
       <span class="truncate text-zinc-700 dark:text-zinc-300">{title}</span>
     </nav>
@@ -57,7 +96,7 @@ const dateStr = date
         <span
           class="rounded-full bg-blue-50 px-2 py-0.5 font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-300"
         >
-          {sessionLabel(session)}
+          {childLabel ?? session}
         </span>
         {dateStr && (
           <time class="text-zinc-500 dark:text-zinc-400" datetime={date?.toISOString()}>
