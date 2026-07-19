@@ -4,6 +4,9 @@
 # (arquitectura-software/, agentes-ia/, etc.) que viven fuera de site/.
 FROM node:22-alpine AS builder
 
+# Habilitar pnpm vía corepack (versión pineada en package.json)
+RUN corepack enable
+
 # nbconvert requiere Python 3 + pip (para convertir .ipynb → HTML estático)
 RUN apk add --no-cache python3 py3-pip
 RUN pip3 install --no-cache-dir --break-system-packages \
@@ -12,8 +15,8 @@ RUN pip3 install --no-cache-dir --break-system-packages \
 WORKDIR /app
 
 # Copiar dependencias primero (mejor cache de Docker)
-COPY site/package.json site/package-lock.json* ./
-RUN npm ci || npm install
+COPY site/package.json site/pnpm-lock.yaml* ./
+RUN pnpm install --frozen-lockfile || pnpm install
 
 # Copiar todo el código del sitio
 COPY site/ ./
@@ -30,7 +33,7 @@ COPY ingenieria-de-software/ /repo-sessions/ingenieria-de-software/
 ENV LEARNING_REPO_ROOT=/repo-sessions
 RUN node scripts/sync-content.mjs && \
     python3 scripts/assets.py && \
-    npm run build
+    pnpm run build
 
 # Etapa 2: nginx
 FROM nginx:1.27-alpine

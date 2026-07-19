@@ -1,35 +1,296 @@
 ---
-// SearchBox pequeño para el header. Usa la UI de Pagefind.
-// Pagefind sólo existe en el directorio `dist/pagefind/` tras el build,
-// por eso el script sólo se inicializa en producción.
+// SearchBox con búsqueda en tiempo real usando Pagefind API.
+// Pagefind sólo existe en dist/pagefind/ tras el build (no en dev).
 ---
-<form
-  id="header-search"
-  class="relative hidden md:block w-full max-w-sm"
-  onsubmit="event.preventDefault(); window.location.href='/search';"
->
-  <label for="header-search-input" class="sr-only">Buscar</label>
-  <input
-    id="header-search-input"
-    type="search"
-    name="q"
-    placeholder="Buscar notas…"
-    autocomplete="off"
-    class="w-full rounded-md border border-zinc-200 bg-white px-3 py-1.5 pr-9 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder-zinc-500"
-  />
-  <svg
-    class="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400"
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke-width="2"
-    stroke="currentColor"
-    aria-hidden="true"
-  >
-    <path
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+
+<div id="header-search" class="relative hidden md:block w-full max-w-sm">
+  <label for="header-search-input" class="sr-only">Buscar notas</label>
+
+  <!-- Input -->
+  <div class="relative">
+    <input
+      id="header-search-input"
+      type="search"
+      name="q"
+      placeholder="Buscar notas…"
+      autocomplete="off"
+      spellcheck="false"
+      aria-autocomplete="list"
+      aria-controls="header-search-results"
+      aria-expanded="false"
+      role="combobox"
+      class="w-full rounded-md border border-zinc-200 bg-white px-3 py-1.5 pr-9 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder-zinc-500"
     />
-  </svg>
-</form>
+    <svg
+      class="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+      />
+    </svg>
+
+    <!-- Spinner (oculto por default) -->
+    <svg
+      id="header-search-spinner"
+      class="pointer-events-none absolute right-2.5 top-1/2 hidden h-4 w-4 -translate-y-1/2 animate-spin text-blue-500"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+  </div>
+
+  <!-- Dropdown de resultados -->
+  <div
+    id="header-search-results"
+    role="listbox"
+    aria-label="Resultados de búsqueda"
+    class="absolute left-0 right-0 top-full z-50 mt-1 hidden max-h-[70vh] overflow-y-auto rounded-lg border border-zinc-200 bg-white shadow-xl dark:border-zinc-800 dark:bg-zinc-900"
+  ></div>
+</div>
+
+<script>
+  /**
+   * SearchBox en tiempo real con Pagefind.
+   *
+   * Comportamiento:
+   * - Debounce 150ms mientras el usuario tipea.
+   * - Muestra top 5 resultados con título, URL y excerpt.
+   * - Escape / click fuera cierra el dropdown.
+   * - Flechas ↑↓ + Enter navegan al resultado seleccionado.
+   * - Link "Ver todos los resultados →" si hay más de 5.
+   */
+  (() => {
+    const input = document.getElementById('header-search-input');
+    const dropdown = document.getElementById('header-search-results');
+    const spinner = document.getElementById('header-search-spinner');
+    if (!input || !dropdown || !spinner) return;
+
+    let pagefind: any = null;
+    let pagefindLoading: Promise<any> | null = null;
+    let debounceTimer: number | undefined;
+    let currentFocusIndex = -1;
+    let lastResults: any[] = [];
+
+    // Lazy-load de Pagefind (sólo existe tras el build)
+    async function loadPagefind() {
+      if (pagefind) return pagefind;
+      if (pagefindLoading) return pagefindLoading;
+      pagefindLoading = (async () => {
+        try {
+          // @ts-ignore — pagefind se carga dinámicamente
+          const pf = await import(/* @vite-ignore */ '/pagefind/pagefind.js');
+          await pf.options({ excerptLength: 20 });
+          pagefind = pf;
+          return pf;
+        } catch (e) {
+          console.warn('Pagefind no disponible:', e);
+          return null;
+        }
+      })();
+      return pagefindLoading;
+    }
+
+    function closeDropdown() {
+      dropdown!.classList.add('hidden');
+      input!.setAttribute('aria-expanded', 'false');
+      currentFocusIndex = -1;
+    }
+
+    function openDropdown() {
+      dropdown!.classList.remove('hidden');
+      input!.setAttribute('aria-expanded', 'true');
+    }
+
+    function setLoading(loading: boolean) {
+      if (loading) {
+        spinner!.classList.remove('hidden');
+      } else {
+        spinner!.classList.add('hidden');
+      }
+    }
+
+    function escapeHtml(s: string): string {
+      return s
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    /**
+     * Convierte el excerpt de Pagefind (con <mark>...</mark>) en HTML
+     * que podemos inyectar. Pagefind ya devuelve el excerpt con <mark>
+     * así que sólo necesitamos sanitizar lo que NO esté dentro de <mark>.
+     */
+    function sanitizeExcerpt(html: string): string {
+      // Permitir <mark> pero escapar el resto
+      return html.replace(/<(\/?)([^>]+)>/g, (m, slash, tag) => {
+        const lower = tag.toLowerCase().trim();
+        if (lower === 'mark' || lower === '/mark') return m;
+        return escapeHtml(m);
+      });
+    }
+
+    async function runSearch(query: string) {
+      const pf = await loadPagefind();
+      if (!pf) {
+        dropdown!.innerHTML =
+          '<div class="p-4 text-sm text-zinc-500 dark:text-zinc-400">El índice de búsqueda no está disponible.</div>';
+        openDropdown();
+        return;
+      }
+
+      try {
+        const search = await pf.search(query);
+        const top = (search.results || []).slice(0, 5);
+        lastResults = top;
+
+        if (top.length === 0) {
+          dropdown!.innerHTML =
+            '<div class="p-4 text-sm text-zinc-500 dark:text-zinc-400">Sin resultados para <span class="font-medium text-zinc-900 dark:text-zinc-100">' +
+            escapeHtml(query) +
+            '</span>.</div>';
+          openDropdown();
+          return;
+        }
+
+        // Fetch detalles de cada resultado en paralelo
+        const details = await Promise.all(
+          top.map(async (r: any) => {
+            try {
+              // Pagefind moderno: r.data es un getter async (Web Worker)
+              return await r.data();
+            } catch {
+              return null;
+            }
+          }),
+        );
+
+        const items = details
+          .map((d: any, i: number) => {
+            if (!d) return '';
+            const url = d.url || '#';
+            const title = d.meta?.title || 'Sin título';
+            const excerpt = sanitizeExcerpt(d.excerpt || '');
+            return (
+              '<a href="' +
+              escapeHtml(url) +
+              '" role="option" data-index="' +
+              i +
+              '" class="block border-b border-zinc-100 px-4 py-3 last:border-b-0 hover:bg-zinc-50 focus:bg-zinc-50 focus:outline-none dark:border-zinc-800 dark:hover:bg-zinc-800/50 dark:focus:bg-zinc-800/50">' +
+              '<div class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">' +
+              escapeHtml(title) +
+              '</div>' +
+              '<div class="mt-0.5 truncate text-xs text-zinc-500 dark:text-zinc-400">' +
+              escapeHtml(url) +
+              '</div>' +
+              (excerpt
+                ? '<div class="mt-1 text-xs text-zinc-600 dark:text-zinc-300">' + excerpt + '</div>'
+                : '') +
+              '</a>'
+            );
+          })
+          .join('');
+
+        const more =
+          search.results.length > 5
+            ? '<a href="/search?q=' +
+              encodeURIComponent(query) +
+              '" class="block border-t border-zinc-200 bg-zinc-50 px-4 py-2 text-center text-sm font-medium text-blue-600 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-blue-400 dark:hover:bg-zinc-800">Ver todos los resultados (' +
+              search.results.length +
+              ') →</a>'
+            : '';
+
+        dropdown!.innerHTML = items + more;
+        openDropdown();
+        currentFocusIndex = -1;
+      } catch (e) {
+        console.error('Search error:', e);
+        dropdown!.innerHTML =
+          '<div class="p-4 text-sm text-red-600 dark:text-red-400">Error al buscar. Intentá de nuevo.</div>';
+        openDropdown();
+      }
+    }
+
+    // Input handler con debounce
+    input.addEventListener('input', () => {
+      const query = (input as HTMLInputElement).value.trim();
+      window.clearTimeout(debounceTimer);
+
+      if (query.length < 2) {
+        closeDropdown();
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      debounceTimer = window.setTimeout(async () => {
+        await runSearch(query);
+        setLoading(false);
+      }, 150);
+    });
+
+    // Submit (Enter sin selección) → ir a /search?q=
+    input.addEventListener('keydown', (e: KeyboardEvent) => {
+      const items = dropdown!.querySelectorAll('[role="option"]');
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (items.length === 0) return;
+        currentFocusIndex = Math.min(currentFocusIndex + 1, items.length - 1);
+        (items[currentFocusIndex] as HTMLElement)?.focus();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (items.length === 0) return;
+        if (currentFocusIndex <= 0) {
+          input.focus();
+          currentFocusIndex = -1;
+        } else {
+          currentFocusIndex--;
+          (items[currentFocusIndex] as HTMLElement)?.focus();
+        }
+      } else if (e.key === 'Enter') {
+        if (currentFocusIndex >= 0 && items[currentFocusIndex]) {
+          e.preventDefault();
+          (items[currentFocusIndex] as HTMLAnchorElement).click();
+        } else {
+          e.preventDefault();
+          const q = (input as HTMLInputElement).value.trim();
+          if (q) window.location.href = '/search?q=' + encodeURIComponent(q);
+        }
+      } else if (e.key === 'Escape') {
+        closeDropdown();
+        input.blur();
+      }
+    });
+
+    // Click fuera cierra
+    document.addEventListener('click', (e) => {
+      if (!dropdown!.contains(e.target as Node) && e.target !== input) {
+        closeDropdown();
+      }
+    });
+
+    // Pre-cargar Pagefind al hacer focus (para que esté listo al tipear)
+    input.addEventListener('focus', () => {
+      loadPagefind();
+      const query = (input as HTMLInputElement).value.trim();
+      if (query.length >= 2 && dropdown!.classList.contains('hidden')) {
+        runSearch(query);
+      }
+    });
+  })();
+</script>

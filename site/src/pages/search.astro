@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
+
 <BaseLayout title="Buscar" description="Buscar en todas las notas">
   <section>
     <h1
@@ -12,41 +13,205 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       Buscá por palabra clave en todas las notas, sesiones y tags.
     </p>
 
-    <!-- Contenedor Pagefind UI. El script lo inicializa si el índice existe. -->
-    <div id="pagefind__search"></div>
+    <!-- Input principal (full-width en esta página) -->
+    <div class="relative mb-6 max-w-2xl">
+      <input
+        id="pagefind-input"
+        type="search"
+        name="q"
+        placeholder="Empezá a tipear…"
+        autocomplete="off"
+        spellcheck="false"
+        class="w-full rounded-lg border border-zinc-300 bg-white px-4 py-3 pr-12 text-base text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder-zinc-500"
+      />
+      <svg
+        class="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-zinc-400"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+        />
+      </svg>
+    </div>
 
-    <noscript>
-      <p class="mt-4 text-sm text-zinc-500">
-        La búsqueda requiere JavaScript habilitado.
-      </p>
-    </noscript>
+    <!-- Contador + estado -->
+    <div id="pagefind-status" class="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
+      Tipeá al menos 2 caracteres para buscar.
+    </div>
+
+    <!-- Lista de resultados -->
+    <ul id="pagefind-results" class="space-y-4"></ul>
+
+    <!-- Estado vacío -->
+    <div
+      id="pagefind-empty"
+      class="hidden rounded-md border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-200"
+    >
+      Sin resultados para tu búsqueda.
+    </div>
+
+    <!-- Pagefind no disponible -->
+    <div
+      id="pagefind-unavailable"
+      class="hidden rounded-md border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-200"
+    >
+      El índice de búsqueda aún no está disponible. Ejecutá
+      <code class="font-mono">pnpm run build</code>
+      para generarlo.
+    </div>
   </section>
 
-  <!--
-    Pagefind sólo existe tras `npm run build` en `dist/pagefind/`.
-    Si todavía no se generó el índice (p.ej. en `astro dev`), mostramos un mensaje.
-  -->
   <script>
-    async function initPagefind() {
-      try {
-        // @ts-ignore — Pagefind se carga dinámicamente
-        const pagefind = await import(/* @vite-ignore */ '/pagefind/pagefind.js');
-        await pagefind.options({ excerptLength: 30 });
-        await pagefind.search('');
-        pagefind.initSearch({
-          element: '#pagefind__search',
-          resetStyles: false,
-          showImages: false,
-          showEmptyFilters: false,
+    /**
+     * Página /search: renderiza TODOS los resultados para una query.
+     * Usa la API directa de Pagefind (no initSearch, que estaba roto).
+     */
+    (() => {
+      const input = document.getElementById('pagefind-input') as HTMLInputElement | null;
+      const resultsEl = document.getElementById('pagefind-results');
+      const statusEl = document.getElementById('pagefind-status');
+      const emptyEl = document.getElementById('pagefind-empty');
+      const unavailableEl = document.getElementById('pagefind-unavailable');
+      if (!input || !resultsEl || !statusEl || !emptyEl || !unavailableEl) return;
+
+      let pagefind: any = null;
+      let pagefindLoading: Promise<any> | null = null;
+      let debounceTimer: number | undefined;
+
+      async function loadPagefind() {
+        if (pagefind) return pagefind;
+        if (pagefindLoading) return pagefindLoading;
+        pagefindLoading = (async () => {
+          try {
+            // @ts-ignore — pagefind se carga dinámicamente
+            const pf = await import(/* @vite-ignore */ '/pagefind/pagefind.js');
+            await pf.options({ excerptLength: 40 });
+            pagefind = pf;
+            return pf;
+          } catch {
+            return null;
+          }
+        })();
+        return pagefindLoading;
+      }
+
+      function escapeHtml(s: string): string {
+        return s
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      function sanitizeExcerpt(html: string): string {
+        return html.replace(/<(\/?)([^>]+)>/g, (m, slash, tag) => {
+          const lower = tag.toLowerCase().trim();
+          if (lower === 'mark' || lower === '/mark') return m;
+          return escapeHtml(m);
         });
-      } catch (e) {
-        const host = document.getElementById('pagefind__search');
-        if (host) {
-          host.innerHTML =
-            '<p class="rounded-md border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-200">El índice de búsqueda aún no está disponible. Ejecutá <code class="font-mono">npm run build</code> para generarlo.</p>';
+      }
+
+      async function runSearch(query: string) {
+        const pf = await loadPagefind();
+        if (!pf) {
+          unavailableEl!.classList.remove('hidden');
+          statusEl!.textContent = '';
+          resultsEl!.innerHTML = '';
+          emptyEl!.classList.add('hidden');
+          return;
+        }
+        unavailableEl!.classList.add('hidden');
+
+        if (!query) {
+          resultsEl!.innerHTML = '';
+          statusEl!.textContent = 'Tipeá al menos 2 caracteres para buscar.';
+          emptyEl!.classList.add('hidden');
+          return;
+        }
+
+        statusEl!.textContent = `Buscando "${query}"…`;
+        resultsEl!.innerHTML = '';
+
+        try {
+          const search = await pf.search(query);
+          const all = search.results || [];
+
+          if (all.length === 0) {
+            statusEl!.textContent = '';
+            emptyEl!.classList.remove('hidden');
+            return;
+          }
+
+          emptyEl!.classList.add('hidden');
+
+          const details = await Promise.all(
+            all.map(async (r: any) => {
+              try {
+                // Pagefind moderno: r.data es un getter async (Web Worker)
+                return await r.data();
+              } catch {
+                return null;
+              }
+            }),
+          );
+
+          const items = details
+            .filter((d: any) => d)
+            .map((d: any) => {
+              const url = d.url || '#';
+              const title = d.meta?.title || 'Sin título';
+              const excerpt = sanitizeExcerpt(d.excerpt || '');
+              return (
+                '<li>' +
+                '<a href="' +
+                escapeHtml(url) +
+                '" class="block rounded-lg border border-zinc-200 bg-white p-4 transition-colors hover:border-blue-400 hover:bg-blue-50/30 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-blue-500 dark:hover:bg-blue-950/20">' +
+                '<h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">' +
+                escapeHtml(title) +
+                '</h3>' +
+                '<div class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">' +
+                escapeHtml(url) +
+                '</div>' +
+                (excerpt
+                  ? '<p class="mt-2 text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">' +
+                    excerpt +
+                    '</p>'
+                  : '') +
+                '</a>' +
+                '</li>'
+              );
+            })
+            .join('');
+
+          resultsEl!.innerHTML = items;
+          statusEl!.textContent = `${all.length} resultado${all.length === 1 ? '' : 's'} para "${query}".`;
+        } catch (e) {
+          console.error('Search error:', e);
+          statusEl!.textContent = 'Error al buscar. Intentá de nuevo.';
         }
       }
-    }
-    document.addEventListener('DOMContentLoaded', initPagefind);
+
+      input.addEventListener('input', () => {
+        const query = input.value.trim();
+        window.clearTimeout(debounceTimer);
+        debounceTimer = window.setTimeout(() => runSearch(query), 150);
+      });
+
+      // Si hay query inicial (?q=), setear el input y ejecutarla al cargar
+      const urlParams = new URLSearchParams(window.location.search);
+      const initial = (urlParams.get('q') || '').trim();
+      if (initial) {
+        input.value = initial;
+        runSearch(initial);
+      }
+    })();
   </script>
 </BaseLayout>
