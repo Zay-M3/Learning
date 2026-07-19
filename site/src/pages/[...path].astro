@@ -1,0 +1,332 @@
+---
+import {
+  LEAF_SESSIONS,
+  NAMESPACES,
+  type Namespace,
+  type NamespaceChild,
+} from '../utils/posts.ts';
+import {
+  getPostsBySessionField,
+  sessionLabel,
+  sessionDescription,
+} from '../utils/posts.ts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MarkdownCard from '../components/MarkdownCard.astro';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
+interface AssetMeta {
+  type: 'notebook' | 'file' | 'binary';
+  slug: string;
+  title: string;
+  filename: string;
+  description?: string;
+  url: string;
+  cells?: number;
+  size_kb?: number;
+  language?: string;
+  extension?: string;
+  lexer?: string;
+}
+
+interface NotebookMeta extends AssetMeta {
+  type: 'notebook';
+  cells: number;
+  language: string;
+}
+interface FileMeta extends AssetMeta {
+  type: 'file';
+  language: string;
+  size_kb: number;
+  extension: string;
+}
+interface BinaryMeta extends AssetMeta {
+  type: 'binary';
+  size_kb: number;
+  extension: string;
+}
+
+type Mode = 'leaf' | 'namespace' | 'namespace-child' | 'not-found';
+
+function resolveMode(segments: string[]): {
+  mode: Mode;
+  leaf?: string;
+  namespace?: Namespace;
+  child?: NamespaceChild;
+} {
+  if (segments.length === 0) return { mode: 'not-found' };
+
+  const [a, b] = segments;
+
+  // 1 segmento
+  if (segments.length === 1) {
+    if ((LEAF_SESSIONS as readonly string[]).includes(a)) {
+      return { mode: 'leaf', leaf: a };
+    }
+    const ns = NAMESPACES.find((n) => n.slug === a);
+    if (ns) return { mode: 'namespace', namespace: ns };
+    return { mode: 'not-found' };
+  }
+
+  // 2 segmentos: namespace+child
+  if (segments.length === 2) {
+    const ns = NAMESPACES.find((n) => n.slug === a);
+    if (!ns) return { mode: 'not-found' };
+    const child = ns.children.find((c) => c.slug === b);
+    if (!child) return { mode: 'not-found' };
+    return { mode: 'namespace-child', namespace: ns, child };
+  }
+
+  // 3+ segmentos: lo maneja [...slug].astro (render de post individual)
+  return { mode: 'not-found' };
+}
+
+export async function getStaticPaths() {
+  const paths: Array<{ params: { path: string | undefined } }> = [];
+
+  for (const leaf of LEAF_SESSIONS) {
+    paths.push({ params: { path: leaf } });
+  }
+  for (const ns of NAMESPACES) {
+    paths.push({ params: { path: ns.slug } });
+    for (const ch of ns.children) {
+      paths.push({ params: { path: `${ns.slug}/${ch.slug}` } });
+    }
+  }
+  return paths;
+}
+
+const rawPath = Astro.params.path;
+const segments = rawPath ? rawPath.split('/').filter(Boolean) : [];
+const { mode, leaf, namespace, child } = resolveMode(segments);
+
+if (mode === 'not-found') {
+  return Astro.redirect('/404');
+}
+
+// Datos según el modo
+let title = '';
+let description = '';
+let posts: Awaited<ReturnType<typeof getPostsBySessionField>> = [];
+let assets: AssetMeta[] = [];
+let assetBasePath = '';
+
+if (mode === 'leaf' && leaf) {
+  title = sessionLabel(leaf);
+  description = `Notas de la sesión ${sessionLabel(leaf)}`;
+  posts = await getPostsBySessionField(leaf);
+  assetBasePath = leaf;
+} else if (mode === 'namespace' && namespace) {
+  title = namespace.label;
+  description = namespace.description;
+  assetBasePath = namespace.slug;
+} else if (mode === 'namespace-child' && namespace && child) {
+  title = child.label;
+  description = `Notas de ${child.label} en ${namespace.label}`;
+  posts = await getPostsBySessionField(child.sessionField);
+  assetBasePath = `${namespace.slug}/${child.slug}`;
+}
+
+// Leer _index.json de assets (solo si la ruta es resoluble)
+if (assetBasePath) {
+  try {
+    const indexPath = path.resolve(
+      process.cwd(),
+      `public/${assetBasePath}/_index.json`,
+    );
+    const raw = await fs.readFile(indexPath, 'utf-8');
+    assets = JSON.parse(raw) as AssetMeta[];
+  } catch {
+    assets = [];
+  }
+}
+
+const notebooks = assets.filter((a): a is NotebookMeta => a.type === 'notebook');
+const files = assets.filter((a): a is FileMeta => a.type === 'file');
+const binaries = assets.filter((a): a is BinaryMeta => a.type === 'binary');
+
+// Breadcrumb para namespace-child
+const breadcrumbHref =
+  mode === 'namespace-child' && namespace
+    ? `/${namespace.slug}`
+    : '/';
+const breadcrumbLabel =
+  mode === 'namespace-child' && namespace ? namespace.label : 'Inicio';
+
+// Resolver href "atrás" (parent) en namespace mode: no hay parent real → home
+const parentHref =
+  mode === 'namespace' ? '/' : breadcrumbHref;
+const parentLabel = mode === 'namespace' ? 'Inicio' : breadcrumbLabel;
+---
+
+<BaseLayout title={title} description={description}>
+  <section>
+    <nav class="mb-2 text-sm text-zinc-500">
+      <a href="/" class="hover:underline">← Inicio</a>
+      {mode === 'namespace-child' && namespace && (
+        <>
+          <span class="mx-1">/</span>
+          <a href={`/${namespace.slug}`} class="hover:underline">
+            {namespace.label}
+          </a>
+        </>
+      )}
+    </nav>
+
+    <h1
+      class="mb-2 text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100"
+    >
+      {title}
+    </h1>
+
+    {/* Descripción (solo namespace mode y namespace-child mode, no leaf) */}
+    {mode === 'namespace' && namespace && (
+      <p class="mb-8 text-zinc-600 dark:text-zinc-400">{namespace.description}</p>
+    )}
+    {mode === 'namespace-child' && child && (
+      <p class="mb-8 text-zinc-600 dark:text-zinc-400">{child.description}</p>
+    )}
+    {(mode === 'leaf') && (
+      <p class="mb-8 text-zinc-600 dark:text-zinc-400">
+        {posts.length} {posts.length === 1 ? 'nota' : 'notas'} en esta sesión.
+      </p>
+    )}
+
+    {/* Modo namespace: lista de children */}
+    {mode === 'namespace' && namespace && (
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {namespace.children.map((ch) => (
+          <a
+            href={`/${namespace.slug}/${ch.slug}`}
+            class="group block rounded-lg border border-zinc-200 bg-white p-5 transition hover:border-blue-500 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-blue-500"
+          >
+            <div class="mb-2 flex items-center justify-between">
+              <h3 class="text-lg font-semibold text-zinc-900 group-hover:text-blue-600 dark:text-zinc-100 dark:group-hover:text-blue-400">
+                {ch.label}
+              </h3>
+            </div>
+            <p class="text-sm text-zinc-600 dark:text-zinc-400">
+              {ch.description}
+            </p>
+            <p class="mt-3 text-xs text-blue-600 dark:text-blue-400">Explorar →</p>
+          </a>
+        ))}
+      </div>
+    )}
+
+    {/* Modo leaf o namespace-child: lista de markdowns */}
+    {(mode === 'leaf' || mode === 'namespace-child') && (
+      <>
+        {posts.length === 0 ? (
+          <p class="text-sm text-zinc-500">Todavía no hay notas en esta sección.</p>
+        ) : (
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {posts.map((post) => <MarkdownCard post={post} />)}
+          </div>
+        )}
+      </>
+    )}
+
+    {notebooks.length > 0 && (
+      <section class="mt-12">
+        <h2 class="mb-4 text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+          📓 Notebooks
+        </h2>
+        <p class="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
+          Cuadernos Jupyter ejecutados y renderizados como HTML estático.
+        </p>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {notebooks.map((nb) => (
+            <a
+              href={nb.url}
+              class="group block rounded-lg border border-zinc-200 bg-white p-5 transition hover:border-blue-500 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-blue-500"
+            >
+              <div class="mb-2 flex items-center gap-2">
+                <span class="inline-flex h-6 w-6 items-center justify-center rounded bg-orange-500 text-xs font-bold text-white">
+                  📓
+                </span>
+                <h3 class="text-lg font-semibold text-zinc-900 group-hover:text-blue-600 dark:text-zinc-100 dark:group-hover:text-blue-400">
+                  {nb.title}
+                </h3>
+              </div>
+              <p class="mb-2 text-xs text-zinc-500 dark:text-zinc-400">
+                {nb.filename} · {nb.cells} {nb.cells === 1 ? 'celda' : 'celdas'} · {nb.size_kb} KB
+              </p>
+              {nb.description && (
+                <p class="text-sm text-zinc-600 line-clamp-3 dark:text-zinc-400">
+                  {nb.description.replace(/^#+\s*/, '').replace(/\n/g, ' ').slice(0, 140)}
+                  {nb.description.length > 140 ? '…' : ''}
+                </p>
+              )}
+              <p class="mt-3 text-xs text-blue-600 dark:text-blue-400">Ver notebook →</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {files.length > 0 && (
+      <section class="mt-8">
+        <h2 class="mb-4 text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+          📁 Archivos
+        </h2>
+        <p class="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
+          Archivos de código renderizados en pantalla con syntax highlighting.
+        </p>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {files.map((f) => (
+            <a
+              href={f.url}
+              class="group block rounded-lg border border-zinc-200 bg-white p-4 transition hover:border-blue-500 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-blue-500"
+            >
+              <div class="mb-2 flex items-center gap-2">
+                <span class="inline-flex h-6 w-6 items-center justify-center rounded bg-zinc-100 text-xs font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                  {f.extension === '.py' ? '🐍' : f.extension === '.json' ? '📋' : f.extension === '.md' ? '📝' : '📄'}
+                </span>
+                <h3 class="text-base font-semibold text-zinc-900 group-hover:text-blue-600 dark:text-zinc-100 dark:group-hover:text-blue-400">
+                  {f.filename}
+                </h3>
+              </div>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400">
+                {f.language} · {f.size_kb} KB
+              </p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {binaries.length > 0 && (
+      <section class="mt-8">
+        <h2 class="mb-4 text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+          🖼️ Recursos
+        </h2>
+        <p class="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
+          Archivos binarios disponibles para descarga.
+        </p>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {binaries.map((b) => (
+            <a
+              href={b.url}
+              download
+              class="group block rounded-lg border border-zinc-200 bg-white p-4 transition hover:border-blue-500 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-blue-500"
+            >
+              <div class="mb-2 flex items-center gap-2">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded bg-zinc-100 text-base dark:bg-zinc-800">
+                  {b.extension === '.png' || b.extension === '.jpg' || b.extension === '.jpeg' || b.extension === '.svg' || b.extension === '.webp' ? '🖼️' : '📄'}
+                </span>
+                <h3 class="text-base font-semibold text-zinc-900 group-hover:text-blue-600 dark:text-zinc-100 dark:group-hover:text-blue-400 break-all">
+                  {b.filename}
+                </h3>
+              </div>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400">
+                {b.extension?.toUpperCase().replace('.', '')} · {b.size_kb} KB
+              </p>
+              <p class="mt-2 text-xs text-blue-600 dark:text-blue-400">Descargar ↓</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </section>
+</BaseLayout>

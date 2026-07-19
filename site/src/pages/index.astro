@@ -1,10 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MarkdownCard from '../components/MarkdownCard.astro';
+import SessionCard from '../components/SessionCard.astro';
+import NamespaceCard from '../components/NamespaceCard.astro';
 import {
-  SESSIONS,
-  SESSION_LABELS,
-  SESSION_DESCRIPTIONS,
+  LEAF_SESSIONS,
+  NAMESPACES,
   getSessionCounts,
   getAllPosts,
 } from '../utils/posts.ts';
@@ -34,27 +35,11 @@ const latest = allPosts.slice(0, 8);
       Sesiones
     </h2>
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {SESSIONS.map((s) => (
-        <a
-          href={`/${s}`}
-          class="group rounded-lg border border-zinc-200 bg-white p-5 transition-all hover:scale-[1.01] hover:border-blue-400 hover:shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
-        >
-          <div class="mb-2 flex items-center justify-between">
-            <h3
-              class="text-base font-semibold text-zinc-900 group-hover:text-blue-700 dark:text-zinc-100 dark:group-hover:text-blue-300"
-            >
-              {SESSION_LABELS[s]}
-            </h3>
-            <span
-              class="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
-            >
-              {counts[s]} {counts[s] === 1 ? 'nota' : 'notas'}
-            </span>
-          </div>
-          <p class="text-sm text-zinc-600 dark:text-zinc-400">
-            {SESSION_DESCRIPTIONS[s]}
-          </p>
-        </a>
+      {LEAF_SESSIONS.map((s) => (
+        <SessionCard session={s} count={counts[s] ?? 0} />
+      ))}
+      {NAMESPACES.map((ns) => (
+        <NamespaceCard namespace={ns} counts={counts} />
       ))}
     </div>
   </section>

@@ -1,7 +1,8 @@
 ---
 import {
-  SESSIONS,
-  SESSION_LABELS,
+  LEAF_SESSIONS,
+  NAMESPACES,
+  LEAF_SESSION_LABELS,
   getSessionCounts,
   getAllTags,
 } from '../utils/posts.ts';
@@ -47,7 +48,7 @@ const topTags = [...tagsMap.entries()]
       </ul>
     </div>
 
-    <!-- Sesiones -->
+    <!-- Sesiones leaf -->
     <div>
       <h2
         class="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400"
@@ -55,19 +56,51 @@ const topTags = [...tagsMap.entries()]
         Sesiones
       </h2>
       <ul class="space-y-1">
-        {SESSIONS.map((s) => (
+        {LEAF_SESSIONS.map((s) => (
           <li>
             <a
               href={`/${s}`}
               class="flex items-center justify-between rounded-md px-3 py-2 text-zinc-700 hover:bg-zinc-200/60 dark:text-zinc-300 dark:hover:bg-zinc-800/60"
             >
-              <span>{SESSION_LABELS[s]}</span>
-              <span class="text-xs text-zinc-500">{counts[s]}</span>
+              <span>{LEAF_SESSION_LABELS[s]}</span>
+              <span class="text-xs text-zinc-500">{counts[s] ?? 0}</span>
             </a>
           </li>
         ))}
       </ul>
     </div>
+
+    <!-- Namespaces (con sus children) -->
+    {NAMESPACES.map((ns) => (
+      <div>
+        <h2
+          class="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400"
+        >
+          {ns.label}
+        </h2>
+        <ul class="space-y-1">
+          <li>
+            <a
+              href={`/${ns.slug}`}
+              class="flex items-center justify-between rounded-md px-3 py-2 text-zinc-700 hover:bg-zinc-200/60 dark:text-zinc-300 dark:hover:bg-zinc-800/60"
+            >
+              <span>📁 Ver {ns.label.toLowerCase()}</span>
+            </a>
+          </li>
+          {ns.children.map((ch) => (
+            <li>
+              <a
+                href={`/${ns.slug}/${ch.slug}`}
+                class="flex items-center justify-between rounded-md px-3 py-2 pl-6 text-zinc-700 hover:bg-zinc-200/60 dark:text-zinc-300 dark:hover:bg-zinc-800/60"
+              >
+                <span>{ch.label}</span>
+                <span class="text-xs text-zinc-500">{counts[ch.sessionField] ?? 0}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
 
     <!-- Tags top -->
     {topTags.length > 0 && (

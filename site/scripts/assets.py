@@ -116,14 +116,42 @@ BINARY_EXTENSIONS: set[str] = {
     ".webm",
 }
 
-SESSIONS: list[str] = [
+# Estructura jerárquica (debe reflejar src/utils/posts.ts).
+# - LEAF_SESSIONS: sesiones planas en el repo root (carpeta directa).
+# - NAMESPACES: cada namespace tiene `children` con su propio `slug`; los
+#   assets viven en `<repo>/<ns>/<child>/`. El "session field" para el
+#   _index.json es el slug del child (se usa como clave en la home).
+LEAF_SESSIONS: list[str] = [
     "arquitectura-software",
     "agentes-ia",
     "algoritmia",
     "ingenieria-de-requisitos",
     "ingenieria-de-software",
-    "Dominios",
 ]
+
+NAMESPACES: list[dict] = [
+    {
+        "slug": "Dominios",
+        "children": [
+            {"slug": "ordenes-de-compra"},
+        ],
+    },
+]
+
+
+def iter_session_paths() -> list[tuple[str, Path]]:
+    """Devuelve (url_path, repo_dir) para cada sesión activa.
+    Para leaf: url_path = leaf slug, repo_dir = <root>/<leaf>.
+    Para namespace-child: url_path = <ns_slug>/<child_slug>, repo_dir = <root>/<ns>/<child>.
+    """
+    out: list[tuple[str, Path]] = []
+    for leaf in LEAF_SESSIONS:
+        out.append((leaf, REPO_ROOT / leaf))
+    for ns in NAMESPACES:
+        for ch in ns["children"]:
+            url_path = f"{ns['slug']}/{ch['slug']}"
+            out.append((url_path, REPO_ROOT / ns["slug"] / ch["slug"]))
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -412,14 +440,17 @@ def render_code_to_html(filepath: Path, language: str, session: str = "") -> tup
 # ---------------------------------------------------------------------------
 
 
-def process_session(session: str) -> list[dict]:
-    """Procesa todos los assets de una sesión. Devuelve la metadata."""
-    session_dir = REPO_ROOT / session
+def process_session(session_dir: Path, session_path: str) -> list[dict]:
+    """Procesa todos los assets de una sesión. Devuelve la metadata.
+    `session_dir` es la carpeta en el repo; `session_path` es el prefijo URL
+    donde se publican los assets. Para namespace-children se pasa
+    p.ej. ("<root>/Dominios/ordenes-de-compra", "Dominios/ordenes-de-compra").
+    """
     if not session_dir.exists():
-        print(f"⏭️  {session}: carpeta inexistente")
+        print(f"⏭️  {session_path}: carpeta inexistente")
         return []
 
-    print(f"\n📂 {session} → {session_dir}")
+    print(f"\n📂 {session_path} → {session_dir}")
     assets = find_assets(session_dir)
     nb_count = len(assets["notebooks"])
     code_count = len(assets["code"])
@@ -430,7 +461,7 @@ def process_session(session: str) -> list[dict]:
 
     # 1. Notebooks
     for nb in assets["notebooks"]:
-        out_file, slug = convert_notebook(nb, session)
+        out_file, slug = convert_notebook(nb, session_path)
         size_kb = round(out_file.stat().st_size / 1024, 1)
         description = get_notebook_description(nb)
         session_meta.append(
@@ -440,7 +471,7 @@ def process_session(session: str) -> list[dict]:
                 "title": titleize(nb.name),
                 "filename": nb.name,
                 "description": description,
-                "url": f"/{session}/notebooks/{slug}/",
+                "url": f"/{session_path}/notebooks/{slug}/",
                 "cells": get_cell_count(nb),
                 "size_kb": size_kb,
                 "language": "jupyter",
@@ -452,11 +483,11 @@ def process_session(session: str) -> list[dict]:
         ext = f.suffix.lower()
         slug = slugify(f.name)
         language = ASSET_EXTENSIONS.get(ext, "text")
-        out_dir = PUBLIC_DIR / session / "files" / slug
+        out_dir = PUBLIC_DIR / session_path / "files" / slug
         out_file = out_dir / "index.html"
         out_dir.mkdir(parents=True, exist_ok=True)
 
-        _body, page = render_code_to_html(f, language, session)
+        _body, page = render_code_to_html(f, language, session_path)
         out_file.write_text(page, encoding="utf-8")
 
         size_kb = round(f.stat().st_size / 1024, 1)
@@ -469,7 +500,7 @@ def process_session(session: str) -> list[dict]:
                 "filename": f.name,
                 "language": language,
                 "lexer": language,
-                "url": f"/{session}/files/{slug}/",
+                "url": f"/{session_path}/files/{slug}/",
                 "size_kb": size_kb,
                 "extension": ext,
             }
@@ -479,7 +510,7 @@ def process_session(session: str) -> list[dict]:
     for f in assets["binary"]:
         ext = f.suffix.lower()
         slug = slugify(f.name)
-        out_dir = PUBLIC_DIR / session / "binaries"
+        out_dir = PUBLIC_DIR / session_path / "binaries"
         out_dir.mkdir(parents=True, exist_ok=True)
         dst = out_dir / f.name
         shutil.copy2(f, dst)
@@ -491,7 +522,7 @@ def process_session(session: str) -> list[dict]:
                 "slug": slug,
                 "title": titleize(f.name),
                 "filename": f.name,
-                "url": f"/{session}/binaries/{f.name}",
+                "url": f"/{session_path}/binaries/{f.name}",
                 "size_kb": size_kb,
                 "extension": ext,
             }
@@ -510,21 +541,21 @@ def main() -> int:
         return 1
 
     total_assets = 0
-    for session in SESSIONS:
-        session_meta = process_session(session)
+    for session_path, repo_dir in iter_session_paths():
+        session_meta = process_session(repo_dir, session_path)
         if session_meta:
-            meta_file = PUBLIC_DIR / session / "_index.json"
+            meta_file = PUBLIC_DIR / session_path / "_index.json"
             meta_file.parent.mkdir(parents=True, exist_ok=True)
             meta_file.write_text(
                 json.dumps(session_meta, indent=2, ensure_ascii=False),
                 encoding="utf-8",
             )
             print(
-                f"✅ {session}: {len(session_meta)} assets → {meta_file.relative_to(SITE_DIR)}"
+                f"✅ {session_path}: {len(session_meta)} assets → {meta_file.relative_to(SITE_DIR)}"
             )
             total_assets += len(session_meta)
         else:
-            print(f"ℹ️  {session}: sin assets")
+            print(f"ℹ️  {session_path}: sin assets")
 
     print(f"\n🎉 Total: {total_assets} assets procesados")
     return 0

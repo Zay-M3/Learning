@@ -1,0 +1,41 @@
+---
+import type { Namespace } from '../utils/posts.ts';
+
+interface Props {
+  namespace: Namespace;
+  counts: Record<string, number>;
+}
+
+const { namespace, counts } = Astro.props;
+---
+
+<a
+  href={`/${namespace.slug}`}
+  class="group block rounded-lg border border-zinc-200 bg-white p-5 transition-all hover:scale-[1.01] hover:border-blue-400 hover:shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+>
+  <div class="mb-2 flex items-center justify-between">
+    <h3
+      class="text-base font-semibold text-zinc-900 group-hover:text-blue-700 dark:text-zinc-100 dark:group-hover:text-blue-300"
+    >
+      {namespace.label}
+    </h3>
+    <span
+      class="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
+    >
+      {namespace.children.length} {namespace.children.length === 1 ? 'dominio' : 'dominios'}
+    </span>
+  </div>
+  <p class="mb-3 text-sm text-zinc-600 dark:text-zinc-400">
+    {namespace.description}
+  </p>
+  <ul class="space-y-1.5 border-t border-zinc-100 pt-3 dark:border-zinc-800">
+    {namespace.children.map((ch) => (
+      <li class="flex items-center justify-between text-xs text-zinc-600 dark:text-zinc-400">
+        <span class="truncate">→ {ch.label}</span>
+        <span class="ml-2 shrink-0 rounded-full bg-zinc-50 px-2 py-0.5 font-medium text-zinc-500 dark:bg-zinc-800/50 dark:text-zinc-400">
+          {counts[ch.sessionField] ?? 0}
+        </span>
+      </li>
+    ))}
+  </ul>
+</a>

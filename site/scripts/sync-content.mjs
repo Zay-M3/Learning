@@ -1,6 +1,11 @@
 #!/usr/bin/env node
-// Sincroniza los markdowns de las sesiones del repo (raíz) hacia src/content/
-// y se asegura de inyectar el frontmatter `session` y `title` en cada archivo.
+// Sincroniza los markdowns de las sesiones del repo (raíz) hacia src/content/.
+// - Leaf sessions: copia recursivamente.
+// - Namespaces: por cada child, copia `<repo>/<ns>/<child>/` → `<site>/src/content/<ns>/<child>/`.
+// Inyecta el frontmatter `session` y `title` en cada archivo.
+//
+// Para namespace-child, el `session` inyectado es el `sessionField` (p.ej. 'ordenes-de-compra'),
+// NO el namespace slug. Esto permite que el schema de Astro valide el frontmatter contra el enum.
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -15,13 +20,25 @@ const REPO_ROOT = process.env.LEARNING_REPO_ROOT
   : path.resolve(SITE_DIR, '..');
 const CONTENT_DIR = path.join(SITE_DIR, 'src', 'content');
 
-const SESSIONS = [
+// Reflejar la jerarquía definida en src/utils/posts.ts
+const LEAF_SESSIONS = [
   'arquitectura-software',
   'agentes-ia',
   'algoritmia',
   'ingenieria-de-requisitos',
   'ingenieria-de-software',
-  'Dominios',
+];
+
+const NAMESPACES = [
+  {
+    slug: 'Dominios',
+    children: [
+      {
+        slug: 'ordenes-de-compra',
+        sessionField: 'ordenes-de-compra',
+      },
+    ],
+  },
 ];
 
 async function main() {
@@ -31,30 +48,58 @@ async function main() {
 
   let totalFiles = 0;
 
-  for (const session of SESSIONS) {
+  // 1) Leaf sessions: copia plana
+  for (const session of LEAF_SESSIONS) {
     const srcDir = path.join(REPO_ROOT, session);
     const dstDir = path.join(CONTENT_DIR, session);
+    let count = 0;
     try {
       await fs.cp(srcDir, dstDir, {
         recursive: true,
         filter: (f) => f.endsWith('.md') || !f.includes('.'),
       });
+      const files = await walkMd(dstDir);
+      for (const file of files) {
+        await ensureFrontmatter(file, session);
+        count++;
+      }
     } catch (e) {
       console.warn(`⚠️  Sesión "${session}" no encontrada en repo root:`, e.message);
-      continue;
     }
+    console.log(`  • ${session}: ${count} markdowns`);
+    totalFiles += count;
+  }
 
-    // Inyectar frontmatter `session` y `title` si faltan
-    const files = await walkMd(dstDir);
-    for (const file of files) {
-      await ensureFrontmatter(file, session);
+  // 2) Namespaces: cada child es un "sessionField" propio
+  for (const ns of NAMESPACES) {
+    for (const ch of ns.children) {
+      const srcDir = path.join(REPO_ROOT, ns.slug, ch.slug);
+      const dstDir = path.join(CONTENT_DIR, ns.slug, ch.slug);
+      let count = 0;
+      try {
+        await fs.mkdir(dstDir, { recursive: true });
+        await fs.cp(srcDir, dstDir, {
+          recursive: true,
+          filter: (f) => f.endsWith('.md') || !f.includes('.'),
+        });
+        const files = await walkMd(dstDir);
+        for (const file of files) {
+          await ensureFrontmatter(file, ch.sessionField);
+          count++;
+        }
+      } catch (e) {
+        console.warn(
+          `⚠️  Namespace child "${ns.slug}/${ch.slug}" no encontrado en repo root:`,
+          e.message,
+        );
+      }
+      console.log(`  • ${ns.slug}/${ch.slug}: ${count} markdowns`);
+      totalFiles += count;
     }
-    totalFiles += files.length;
-    console.log(`  • ${session}: ${files.length} markdowns`);
   }
 
   console.log(
-    `✅ Sincronizadas ${SESSIONS.length} sesiones (${totalFiles} posts) → ${CONTENT_DIR}`,
+    `✅ Sincronizadas ${LEAF_SESSIONS.length + NAMESPACES.length} sesiones (${totalFiles} posts) → ${CONTENT_DIR}`,
   );
 }
 

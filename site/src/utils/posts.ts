@@ -4,29 +4,62 @@ import { resolve } from 'node:path';
 
 export type Post = CollectionEntry<'posts'>;
 
-export const SESSIONS = [
+// Sesiones "leaf": tienen markdowns directamente bajo su carpeta en el repo.
+// Renderizan como `/<slug>/` (lista) y `/<slug>/<post-id>/` (post).
+export const LEAF_SESSIONS = [
   'arquitectura-software',
   'agentes-ia',
   'algoritmia',
   'ingenieria-de-requisitos',
   'ingenieria-de-software',
-  'Dominios',
+] as const;
+export type LeafSession = (typeof LEAF_SESSIONS)[number];
+
+// Namespaces: NO tienen markdowns propios. Agrupan sub-dominios (children).
+// Renderizan como `/<ns>/` (lista de children) y `/<ns>/<child>/` (lista de markdowns del child).
+// `sessionField` es el valor que va en el frontmatter `session` de los markdowns del child.
+export type NamespaceChild = {
+  slug: string;
+  label: string;
+  description: string;
+  sessionField: string;
+};
+
+export type Namespace = {
+  slug: string;
+  label: string;
+  description: string;
+  children: readonly NamespaceChild[];
+};
+
+export const NAMESPACES: readonly Namespace[] = [
+  {
+    slug: 'Dominios',
+    label: 'Dominios',
+    description: 'Investigación de dominios previa a implementación.',
+    children: [
+      {
+        slug: 'ordenes-de-compra',
+        label: 'Órdenes de Compra',
+        description:
+          'Purchase-to-Pay (P2P): ciclo completo de compras y sincronización de stock.',
+        sessionField: 'ordenes-de-compra',
+      },
+    ],
+  },
 ] as const;
 
-export type Session = (typeof SESSIONS)[number];
-
 // Etiquetas amigables para mostrar en la UI
-export const SESSION_LABELS: Record<Session, string> = {
+export const LEAF_SESSION_LABELS: Record<LeafSession, string> = {
   'arquitectura-software': 'Arquitectura de Software',
   'agentes-ia': 'Agentes de IA',
   algoritmia: 'Algoritmia',
   'ingenieria-de-requisitos': 'Ingeniería de Requisitos',
   'ingenieria-de-software': 'Ingeniería de Software',
-  Dominios: 'Dominios',
 };
 
-// Descripciones cortas de cada sesión
-export const SESSION_DESCRIPTIONS: Record<Session, string> = {
+// Descripciones cortas de cada sesión leaf
+export const LEAF_SESSION_DESCRIPTIONS: Record<LeafSession, string> = {
   'arquitectura-software':
     'Patrones, estilos y decisiones de diseño de sistemas a gran escala.',
   'agentes-ia': 'Patrones y técnicas para construir agentes conversacionales.',
@@ -35,8 +68,72 @@ export const SESSION_DESCRIPTIONS: Record<Session, string> = {
     'Elicitación, análisis y gestión de requisitos de software.',
   'ingenieria-de-software':
     'Fundamentos, procesos y prácticas de ingeniería de software.',
-  Dominios: 'Investigación de dominios previa a implementación.',
 };
+
+/**
+ * Resuelve el path URL de un leaf o un namespace+child.
+ * - leaf: 'agentes-ia'
+ * - namespace child: 'Dominios/ordenes-de-compra'
+ */
+export function resolveSessionPath(
+  session: LeafSession | string,
+  child?: string,
+): string {
+  return child ? `${session}/${child}` : session;
+}
+
+/**
+ * Devuelve el label legible de una sesión.
+ * - leaf-session: lookup en LEAF_SESSION_LABELS
+ * - namespace child: lookup del child.label
+ * - namespace: lookup del ns.label
+ * - sessionField (cuando se pasa directamente, p.ej. desde el frontmatter): busca el child
+ *   cuyo sessionField coincide y devuelve su label
+ */
+export function sessionLabel(
+  session: string,
+  child?: string,
+): string {
+  if (child) {
+    const ns = NAMESPACES.find((n) => n.slug === session);
+    const ch = ns?.children.find((c) => c.slug === child);
+    if (ch) return ch.label;
+  }
+  if ((LEAF_SESSIONS as readonly string[]).includes(session)) {
+    return LEAF_SESSION_LABELS[session as LeafSession] ?? session;
+  }
+  // Lookup por sessionField (frontmatter `session` directo de un post)
+  for (const ns of NAMESPACES) {
+    const ch = ns.children.find((c) => c.sessionField === session);
+    if (ch) return ch.label;
+  }
+  const ns = NAMESPACES.find((n) => n.slug === session);
+  return ns?.label ?? session;
+}
+
+/**
+ * Devuelve la descripción legible (leaf-session, namespace-child, namespace).
+ * Si se pasa directamente un sessionField (frontmatter), busca el child correspondiente.
+ */
+export function sessionDescription(
+  session: string,
+  child?: string,
+): string {
+  if (child) {
+    const ns = NAMESPACES.find((n) => n.slug === session);
+    const ch = ns?.children.find((c) => c.slug === child);
+    return ch?.description ?? '';
+  }
+  if ((LEAF_SESSIONS as readonly string[]).includes(session)) {
+    return LEAF_SESSION_DESCRIPTIONS[session as LeafSession] ?? '';
+  }
+  for (const ns of NAMESPACES) {
+    const ch = ns.children.find((c) => c.sessionField === session);
+    if (ch) return ch.description;
+  }
+  const ns = NAMESPACES.find((n) => n.slug === session);
+  return ns?.description ?? '';
+}
 
 /**
  * Devuelve el título de un post. Si el frontmatter no lo trae, lo deriva del
@@ -65,15 +162,17 @@ export async function getAllPosts(): Promise<Post[]> {
 }
 
 /**
- * Devuelve los posts filtrados por sesión.
+ * Devuelve los posts filtrados por session field del frontmatter.
+ * Funciona tanto para leaf como para namespace-child (el sessionField del child
+ * es lo que va en el frontmatter `session`).
  */
-export async function getPostsBySession(session: Session): Promise<Post[]> {
+export async function getPostsBySessionField(sessionField: string): Promise<Post[]> {
   const posts = await getAllPosts();
-  return posts.filter((p) => p.data.session === session);
+  return posts.filter((p) => p.data.session === sessionField);
 }
 
 /**
- * Devuelve los posts que tengan la etiqueta indicada (case-insensitive).
+ * Devuelve los posts filtrados por tag (case-insensitive).
  */
 export async function getPostsByTag(tag: string): Promise<Post[]> {
   const posts = await getAllPosts();
@@ -98,50 +197,67 @@ export async function getAllTags(): Promise<Map<string, number>> {
 }
 
 /**
- * Devuelve todas las sesiones que tienen al menos un post.
+ * Devuelve todos los "sessionField" activos en el repo (presente en al menos un post).
+ * Útil para que la home muestre solo sesiones con contenido.
  */
-export async function getAllSessions(): Promise<Session[]> {
+export async function getActiveSessionFields(): Promise<Set<string>> {
   const posts = await getAllPosts();
-  const present = new Set(posts.map((p) => p.data.session));
-  return SESSIONS.filter((s) => present.has(s));
+  return new Set(posts.map((p) => p.data.session));
 }
 
 /**
- * Cuenta cuántos posts (markdowns) hay por sesión.
+ * Cuenta cuántos posts (markdowns) hay por sessionField.
  */
-export async function getSessionPostCounts(): Promise<Record<Session, number>> {
+export async function getSessionPostCounts(): Promise<Record<string, number>> {
   const posts = await getAllPosts();
-  const counts = Object.fromEntries(
-    SESSIONS.map((s) => [s, 0]),
-  ) as Record<Session, number>;
+  const counts: Record<string, number> = {};
+  for (const leaf of LEAF_SESSIONS) counts[leaf] = 0;
+  for (const ns of NAMESPACES) {
+    for (const ch of ns.children) counts[ch.sessionField] = 0;
+  }
   for (const post of posts) {
-    counts[post.data.session]++;
+    counts[post.data.session] = (counts[post.data.session] ?? 0) + 1;
   }
   return counts;
 }
 
 /**
- * Cuenta cuántos assets (notebooks + archivos de código) hay por sesión,
+ * Cuenta cuántos assets (notebooks + archivos de código) hay por sessionField,
  * leyendo los `_index.json` que genera `scripts/assets.py` durante el build.
+ *
+ * - Para leaf-session: se busca en `public/<leaf>/_index.json`.
+ * - Para namespace-child: se busca en `public/<ns>/<child>/_index.json`.
  */
-export async function getSessionAssetCounts(): Promise<Record<Session, number>> {
-  const counts = Object.fromEntries(
-    SESSIONS.map((s) => [s, 0]),
-  ) as Record<Session, number>;
+export async function getSessionAssetCounts(): Promise<Record<string, number>> {
+  const counts: Record<string, number> = {};
+  for (const leaf of LEAF_SESSIONS) counts[leaf] = 0;
+  for (const ns of NAMESPACES) {
+    for (const ch of ns.children) counts[ch.sessionField] = 0;
+  }
 
-  // `process.cwd()` durante el build es la raíz del proyecto Astro
-  // (donde están `astro.config.mjs`, `package.json`, `public/`).
   const projectRoot = process.cwd();
 
+  const lookupPaths: Array<{ key: string; path: string }> = [];
+  for (const leaf of LEAF_SESSIONS) {
+    lookupPaths.push({ key: leaf, path: resolve(projectRoot, 'public', leaf, '_index.json') });
+  }
+  for (const ns of NAMESPACES) {
+    for (const ch of ns.children) {
+      lookupPaths.push({
+        key: ch.sessionField,
+        path: resolve(projectRoot, 'public', ns.slug, ch.slug, '_index.json'),
+      });
+    }
+  }
+
   await Promise.all(
-    SESSIONS.map(async (s) => {
+    lookupPaths.map(async ({ key, path }) => {
       try {
-        const path = resolve(projectRoot, 'public', s, '_index.json');
         const raw = await readFile(path, 'utf8');
         const data = JSON.parse(raw);
-        if (Array.isArray(data)) counts[s] = data.length;
+        if (Array.isArray(data)) counts[key] = data.length;
       } catch {
-        // No _index.json → 0 assets (sesión sin notebooks/files)
+        // No _index.json → 0 assets
       }
     }),
   );
@@ -150,20 +266,20 @@ export async function getSessionAssetCounts(): Promise<Record<Session, number>> 
 }
 
 /**
- * Cuenta el total combinado (posts + assets) por sesión.
- * Es lo que se muestra en la home: "X notas" donde X incluye tanto
- * markdowns como notebooks/archivos de código.
+ * Cuenta el total combinado (posts + assets) por sessionField.
+ * Es lo que se muestra en la home: "X notas".
  */
-export async function getSessionCounts(): Promise<Record<Session, number>> {
+export async function getSessionCounts(): Promise<Record<string, number>> {
   const [posts, assets] = await Promise.all([
     getSessionPostCounts(),
     getSessionAssetCounts(),
   ]);
-  const total = Object.fromEntries(
-    SESSIONS.map((s) => [s, 0]),
-  ) as Record<Session, number>;
-  for (const s of SESSIONS) {
-    total[s] = posts[s] + assets[s];
+  const total: Record<string, number> = {};
+  for (const leaf of LEAF_SESSIONS) total[leaf] = posts[leaf] + assets[leaf];
+  for (const ns of NAMESPACES) {
+    for (const ch of ns.children) {
+      total[ch.sessionField] = posts[ch.sessionField] + assets[ch.sessionField];
+    }
   }
   return total;
 }
@@ -171,14 +287,8 @@ export async function getSessionCounts(): Promise<Record<Session, number>> {
 /**
  * Convierte un slug de entrada a la ruta URL del sitio.
  * Ej: id "arquitectura-software/monolito" → "/arquitectura-software/monolito"
+ *     id "Dominios/ordenes-de-compra/01-foo" → "/Dominios/ordenes-de-compra/01-foo"
  */
 export function postUrl(post: Post): string {
   return `/${post.id}`;
-}
-
-/**
- * Etiqueta legible de una sesión (con fallback al slug).
- */
-export function sessionLabel(session: Session | string): string {
-  return SESSION_LABELS[session as Session] ?? session;
 }

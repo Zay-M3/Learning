@@ -13203,10 +13203,10 @@ div#notebook {
 <div class="output_area">
 <div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>time.struct_time(tm_year=2026, tm_mon=7, tm_mday=19, tm_hour=5, tm_min=20, tm_sec=47, tm_wday=6, tm_yday=200, tm_isdst=0)
-time.struct_time(tm_year=2026, tm_mon=7, tm_mday=19, tm_hour=0, tm_min=20, tm_sec=47, tm_wday=6, tm_yday=200, tm_isdst=0)
-tiempo en segundos desde epoch con UTC 495677
-tiempo en segundos desde epoch con Machile Local time 495672
+<pre>time.struct_time(tm_year=2026, tm_mon=7, tm_mday=19, tm_hour=6, tm_min=7, tm_sec=12, tm_wday=6, tm_yday=200, tm_isdst=0)
+time.struct_time(tm_year=2026, tm_mon=7, tm_mday=19, tm_hour=1, tm_min=7, tm_sec=12, tm_wday=6, tm_yday=200, tm_isdst=0)
+tiempo en segundos desde epoch con UTC 495678
+tiempo en segundos desde epoch con Machile Local time 495673
 Diferencia entre ambos (horas) 5
 </pre>
 </div>
@@ -13253,12 +13253,12 @@ Diferencia entre ambos (horas) 5
 <div class="output_area">
 <div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>1784438447.4479878
+<pre>1784441232.997768
 Comprobemos
-1784438447
-1784438447.4479878
-diferencia 1784438447 - 1784438447.4479878 = -0.44798779487609863
-Veamoslo asi en la misma linea 1784438447.4483032 y 1784438447
+1784441232
+1784441232.997768
+diferencia 1784441232 - 1784441232.997768 = -0.9977679252624512
+Veamoslo asi en la misma linea 1784441232.9980683 y 1784441232
 </pre>
 </div>
 </div>
@@ -13314,15 +13314,15 @@ Veamoslo asi en la misma linea 1784438447.4483032 y 1784438447
 <div class="output_area">
 <div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Tiempo tardado en ejecutarse time.time 1000.342845916748
+<pre>Tiempo tardado en ejecutarse time.time 1000.4062652587891
 </pre>
 </div>
 </div>
 <div class="output_area">
 <div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Tiempo tardado en ejecutarse time.perf_counter 1000.3565028309822
-diferencia entre ambos 1000.3565028309822 - 1000.342845916748 = 0.013656914234161377
+<pre>Tiempo tardado en ejecutarse time.perf_counter 1000.3208704292774
+diferencia entre ambos 1000.3208704292774 - 1000.4062652587891 = 0.08539482951164246
 </pre>
 </div>
 </div>
@@ -13409,10 +13409,10 @@ diferencia entre ambos 1000.3565028309822 - 1000.342845916748 = 0.01365691423416
 <div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>[2, 4, 6, 8, 10, 12, 14, 16, 18]
-2.812198220224225
-[6.962600414452931, 2.8641171544112325, 5.783222945590163, 5.644986308859083, 2.0714985819517686, 4.183795705772219, 7.688010017416651, 2.644525221767104, 9.854752362044767, 8.7108595036701]
-Suma que queriamos 90, tiempo que tardo 0.0023031607270240784
-Multiplcacion random que queriamos 472831927204331.7, tiempo que tardo 0.00989530235528946
+4.423004580506432
+[2.913513364190823, 6.684133112655081, 5.525721744371832, 9.820765893696512, 3.2276052365326247, 1.7435575352292525, 7.171530979147766, 3.2874451485328757, 6.366785881877852, 4.815831880115933]
+Suma que queriamos 90, tiempo que tardo 0.0020926818251609802
+Multiplcacion random que queriamos 300924518075707.94, tiempo que tardo 0.010905787348747253
 </pre>
 </div>
 </div>
@@ -13469,10 +13469,10 @@ Multiplcacion random que queriamos 472831927204331.7, tiempo que tardo 0.0098953
 <div class="output_area">
 <div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Tiempos de la funcion 1 [0.01828128658235073, 0.018088597804307938, 0.020466447807848454, 0.016699711792171, 0.014661362394690514]
-Tiempos de la funcion 2 [0.18459256831556559, 0.20994799584150314, 0.21947643253952265, 0.19869051408022642, 0.18276010639965534]
-Minimo real, es el que define cuanto demoro, de la primera 0.014661362394690514
-Minimo real, es el que define cuanto demoro, de la primera 0.18276010639965534
+<pre>Tiempos de la funcion 1 [0.017291140742599964, 0.017213895916938782, 0.017242727801203728, 0.017813075333833694, 0.01682705245912075]
+Tiempos de la funcion 2 [0.20021300110965967, 0.2052609259262681, 0.2051819683983922, 0.2023548185825348, 0.19723255280405283]
+Minimo real, es el que define cuanto demoro, de la primera 0.01682705245912075
+Minimo real, es el que define cuanto demoro, de la primera 0.19723255280405283
 </pre>
 </div>
 </div>
@@ -13517,10 +13517,10 @@ Minimo real, es el que define cuanto demoro, de la primera 0.18276010639965534
 <div class="output_area">
 <div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Tiempo funcion 2 refactorizada [0.1807059021666646, 0.1927639450877905, 0.19636238738894463, 0.17418938782066107, 0.1919315466657281]
-Tiermpo tardado minimo 0.17418938782066107
-Tiempos funciton 2 super refactor [0.1736858207732439, 0.17051584273576736, 0.1799449399113655, 0.18717845901846886, 0.1844076905399561]
-Tiermpo tardado minimo 0.17051584273576736
+<pre>Tiempo funcion 2 refactorizada [0.18443078640848398, 0.17893387749791145, 0.16962014324963093, 0.1547471359372139, 0.1779649220407009]
+Tiermpo tardado minimo 0.1547471359372139
+Tiempos funciton 2 super refactor [0.16453205794095993, 0.16704932134598494, 0.18647414818406105, 0.15552919078618288, 0.1672188639640808]
+Tiermpo tardado minimo 0.15552919078618288
 </pre>
 </div>
 </div>
