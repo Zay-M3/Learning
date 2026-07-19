@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>quicshort.py - Learning</title>
+  <title>index-ingenieria-de-software.md - Learning</title>
   <style>
     body { font-family: system-ui, -apple-system, sans-serif; max-width: 1000px; margin: 0 auto; padding: 2rem; background: #fafafa; color: #18181b; }
     pre, code { font-family: 'Fira Mono', 'Cascadia Code', 'Courier New', monospace; font-size: 0.875rem; line-height: 1.5; }
@@ -16,11 +16,11 @@
   </style>
 </head>
 <body>
-  <a href="/algoritmia/" class="back">← Volver a algoritmia</a>
-  <h1>quicshort.py</h1>
+  <a href="/ingenieria-de-software/" class="back">← Volver a ingenieria-de-software</a>
+  <h1>index-ingenieria-de-software.md</h1>
   <p class="meta">
-    Lenguaje: <code>Python</code>
-    · Tamaño: <code>0.6 KB</code>
+    Lenguaje: <code>Markdown</code>
+    · Tamaño: <code>0.3 KB</code>
     · Solo lectura
   </p>
   <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
@@ -146,48 +146,22 @@ body .il { color: #AE81FF } /* Literal.Number.Integer.Long */
 <span class="normal"><a href="#line-13">13</a></span>
 <span class="normal"><a href="#line-14">14</a></span>
 <span class="normal"><a href="#line-15">15</a></span>
-<span class="normal"><a href="#line-16">16</a></span>
-<span class="normal"><a href="#line-17">17</a></span>
-<span class="normal"><a href="#line-18">18</a></span>
-<span class="normal"><a href="#line-19">19</a></span>
-<span class="normal"><a href="#line-20">20</a></span>
-<span class="normal"><a href="#line-21">21</a></span>
-<span class="normal"><a href="#line-22">22</a></span>
-<span class="normal"><a href="#line-23">23</a></span>
-<span class="normal"><a href="#line-24">24</a></span>
-<span class="normal"><a href="#line-25">25</a></span>
-<span class="normal"><a href="#line-26">26</a></span>
-<span class="normal"><a href="#line-27">27</a></span>
-<span class="normal"><a href="#line-28">28</a></span>
-<span class="normal"><a href="#line-29">29</a></span></pre></div></td><td class="code"><div><pre><span></span><a id="line-1" name="line-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
-<a id="line-2" name="line-2"></a><span class="n">n</span> <span class="o">=</span> <span class="mi">10000</span>
-<a id="line-3" name="line-3"></a>
-<a id="line-4" name="line-4"></a><span class="n">l</span> <span class="o">=</span> <span class="p">[]</span>
-<a id="line-5" name="line-5"></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-<a id="line-6" name="line-6"></a>    <span class="n">l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">9999</span><span class="p">)))</span>
+<span class="normal"><a href="#line-16">16</a></span></pre></div></td><td class="code"><div><pre><span></span><a id="line-1" name="line-1"></a><span class="gh"># Ingenieria De Software</span>
+<a id="line-2" name="line-2"></a>
+<a id="line-3" name="line-3"></a><span class="gs">**Creado:**</span> 16 Jun 2026
+<a id="line-4" name="line-4"></a><span class="gs">**Archivos:**</span> 1
+<a id="line-5" name="line-5"></a>
+<a id="line-6" name="line-6"></a>---
 <a id="line-7" name="line-7"></a>
-<a id="line-8" name="line-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">quickshort</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
-<a id="line-9" name="line-9"></a>    <span class="n">_quickshort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<a id="line-10" name="line-10"></a>
-<a id="line-11" name="line-11"></a><span class="k">def</span><span class="w"> </span><span class="nf">_quickshort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">):</span>
-<a id="line-12" name="line-12"></a>    <span class="k">if</span> <span class="n">low</span> <span class="o">&lt;</span> <span class="n">high</span><span class="p">:</span>
-<a id="line-13" name="line-13"></a>        <span class="n">pivot</span> <span class="o">=</span> <span class="n">parttion</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
-<a id="line-14" name="line-14"></a>        <span class="n">_quickshort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">pivot</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<a id="line-15" name="line-15"></a>        <span class="n">_quickshort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">pivot</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
-<a id="line-16" name="line-16"></a>
-<a id="line-17" name="line-17"></a><span class="k">def</span><span class="w"> </span><span class="nf">parttion</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">):</span>
-<a id="line-18" name="line-18"></a>    <span class="n">pivot</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">high</span><span class="p">]</span>
-<a id="line-19" name="line-19"></a>    <span class="n">i</span> <span class="o">=</span> <span class="n">low</span>
-<a id="line-20" name="line-20"></a>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">):</span>
-<a id="line-21" name="line-21"></a>        <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">pivot</span><span class="p">:</span>
-<a id="line-22" name="line-22"></a>            <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
-<a id="line-23" name="line-23"></a>            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-<a id="line-24" name="line-24"></a>    <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">high</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">high</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-<a id="line-25" name="line-25"></a>    <span class="k">return</span> <span class="n">i</span>
-<a id="line-26" name="line-26"></a>    
-<a id="line-27" name="line-27"></a><span class="n">quickshort</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
-<a id="line-28" name="line-28"></a><span class="nb">print</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
-<a id="line-29" name="line-29"></a>        
+<a id="line-8" name="line-8"></a><span class="gu">## Archivos en este tema</span>
+<a id="line-9" name="line-9"></a>
+<a id="line-10" name="line-10"></a>| Archivo | Descripción | Fecha |
+<a id="line-11" name="line-11"></a>|---|---|---|
+<a id="line-12" name="line-12"></a>| [<span class="nt">politicas-de-pr.md</span>](<span class="na">./politicas-de-pr.md</span>) | políticas de pull requests: tamaño, stacked PRs, conteo de tests | Jun 2026 |
+<a id="line-13" name="line-13"></a>
+<a id="line-14" name="line-14"></a>---
+<a id="line-15" name="line-15"></a>
+<a id="line-16" name="line-16"></a><span class="ge">*Usa este tema para documentar tu aprendizaje sobre Ingenieria De Software.*</span>
 </pre></div></td></tr></table></div>
 </body>
 </html>

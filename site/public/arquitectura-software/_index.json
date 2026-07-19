@@ -1,0 +1,200 @@
+[
+  {
+    "type": "file",
+    "slug": "arquitectura-limpia",
+    "title": "Arquitectura Limpia",
+    "filename": "arquitectura-limpia.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/arquitectura-limpia/",
+    "size_kb": 5.7,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "arquitectura-orientada-eventos",
+    "title": "Arquitectura Orientada Eventos",
+    "filename": "arquitectura-orientada-eventos.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/arquitectura-orientada-eventos/",
+    "size_kb": 5.0,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "arquitectura-orientada-servicios",
+    "title": "Arquitectura Orientada Servicios",
+    "filename": "arquitectura-orientada-servicios.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/arquitectura-orientada-servicios/",
+    "size_kb": 3.7,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "cliente-servidor-modalidad",
+    "title": "Cliente Servidor Modalidad",
+    "filename": "cliente-servidor-modalidad.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/cliente-servidor-modalidad/",
+    "size_kb": 2.3,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "costos-y-lenguaje-comun",
+    "title": "Costos Y Lenguaje Comun",
+    "filename": "costos-y-lenguaje-comun.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/costos-y-lenguaje-comun/",
+    "size_kb": 4.3,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "cuando-usar-patrones",
+    "title": "Cuando Usar Patrones",
+    "filename": "cuando-usar-patrones.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/cuando-usar-patrones/",
+    "size_kb": 4.7,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "estilos-arquitectura",
+    "title": "Estilos Arquitectura",
+    "filename": "estilos-arquitectura.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/estilos-arquitectura/",
+    "size_kb": 3.0,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "fundamentos-arquitectura",
+    "title": "Fundamentos Arquitectura",
+    "filename": "fundamentos-arquitectura.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/fundamentos-arquitectura/",
+    "size_kb": 7.1,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "guion-presentacion-arquitectura-software",
+    "title": "Guion Presentacion Arquitectura Software",
+    "filename": "guion-presentacion-arquitectura-software.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/guion-presentacion-arquitectura-software/",
+    "size_kb": 92.6,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "index-arquitectura-software",
+    "title": "Index Arquitectura Software",
+    "filename": "index-arquitectura-software.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/index-arquitectura-software/",
+    "size_kb": 2.2,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "ley-de-demeter",
+    "title": "Ley De Demeter",
+    "filename": "ley-de-demeter.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/ley-de-demeter/",
+    "size_kb": 3.9,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "mapreduce",
+    "title": "Mapreduce",
+    "filename": "mapreduce.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/mapreduce/",
+    "size_kb": 6.6,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "microservicios",
+    "title": "Microservicios",
+    "filename": "microservicios.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/microservicios/",
+    "size_kb": 4.9,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "monolito",
+    "title": "Monolito",
+    "filename": "monolito.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/monolito/",
+    "size_kb": 2.9,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "serendipia-en-arquitectura",
+    "title": "Serendipia En Arquitectura",
+    "filename": "serendipia-en-arquitectura.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/serendipia-en-arquitectura/",
+    "size_kb": 2.4,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "sharding",
+    "title": "Sharding",
+    "filename": "sharding.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/sharding/",
+    "size_kb": 3.7,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "share-nothing",
+    "title": "Share Nothing",
+    "filename": "share-nothing.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/share-nothing/",
+    "size_kb": 4.3,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "solid-principles",
+    "title": "Solid Principles",
+    "filename": "solid-principles.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/arquitectura-software/files/solid-principles/",
+    "size_kb": 7.7,
+    "extension": ".md"
+  }
+]

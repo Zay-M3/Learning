@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AGENTS.md - Learning</title>
+  <title>patrones-fundamentales.md - Learning</title>
   <style>
     body { font-family: system-ui, -apple-system, sans-serif; max-width: 1000px; margin: 0 auto; padding: 2rem; background: #fafafa; color: #18181b; }
     pre, code { font-family: 'Fira Mono', 'Cascadia Code', 'Courier New', monospace; font-size: 0.875rem; line-height: 1.5; }
@@ -16,11 +16,11 @@
   </style>
 </head>
 <body>
-  <a href="../" class="back">← Volver</a>
-  <h1>AGENTS.md</h1>
+  <a href="/agentes-ia/" class="back">← Volver a agentes-ia</a>
+  <h1>patrones-fundamentales.md</h1>
   <p class="meta">
     Lenguaje: <code>Markdown</code>
-    · Tamaño: <code>0.8 KB</code>
+    · Tamaño: <code>0.6 KB</code>
     · Solo lectura
   </p>
   <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
@@ -131,21 +131,51 @@ body .il { color: #AE81FF } /* Literal.Number.Integer.Long */
 <body>
 <h2></h2>
 
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"><a href="#line-1">1</a></span>
-<span class="normal"><a href="#line-2">2</a></span>
-<span class="normal"><a href="#line-3">3</a></span>
-<span class="normal"><a href="#line-4">4</a></span>
-<span class="normal"><a href="#line-5">5</a></span>
-<span class="normal"><a href="#line-6">6</a></span>
-<span class="normal"><a href="#line-7">7</a></span>
-<span class="normal"><a href="#line-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><a id="line-1" name="line-1"></a>ROL PARA ESTA SESION
-<a id="line-2" name="line-2"></a>Eres un profesor de algoritmia, explicar de una forma sencila, usando ejemplo a lo tipo dumie, pero sin dar la respuesta, si se necesita provees la documentacion exacta de donde extraer las cosas (usa context7 para la documentacon)
-<a id="line-3" name="line-3"></a>
-<a id="line-4" name="line-4"></a>OBJETIVO
-<a id="line-5" name="line-5"></a>Vas a enseñarme como el module time en python, esto con el objetivo de poder aprender a medir tiempo entre funciones y algoritmos para luego tocar eso, aprender todos los diferentes algoritmos que ayudan en este caso, primeramente en python y el uso de todo esto para escala de servicios.
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"><a href="#line-1"> 1</a></span>
+<span class="normal"><a href="#line-2"> 2</a></span>
+<span class="normal"><a href="#line-3"> 3</a></span>
+<span class="normal"><a href="#line-4"> 4</a></span>
+<span class="normal"><a href="#line-5"> 5</a></span>
+<span class="normal"><a href="#line-6"> 6</a></span>
+<span class="normal"><a href="#line-7"> 7</a></span>
+<span class="normal"><a href="#line-8"> 8</a></span>
+<span class="normal"><a href="#line-9"> 9</a></span>
+<span class="normal"><a href="#line-10">10</a></span>
+<span class="normal"><a href="#line-11">11</a></span>
+<span class="normal"><a href="#line-12">12</a></span>
+<span class="normal"><a href="#line-13">13</a></span>
+<span class="normal"><a href="#line-14">14</a></span>
+<span class="normal"><a href="#line-15">15</a></span>
+<span class="normal"><a href="#line-16">16</a></span>
+<span class="normal"><a href="#line-17">17</a></span>
+<span class="normal"><a href="#line-18">18</a></span>
+<span class="normal"><a href="#line-19">19</a></span>
+<span class="normal"><a href="#line-20">20</a></span>
+<span class="normal"><a href="#line-21">21</a></span>
+<span class="normal"><a href="#line-22">22</a></span>
+<span class="normal"><a href="#line-23">23</a></span></pre></div></td><td class="code"><div><pre><span></span><a id="line-1" name="line-1"></a><span class="gh"># Patrones Fundamentales de Agentes IA</span>
+<a id="line-2" name="line-2"></a>
+<a id="line-3" name="line-3"></a><span class="gu">## ReAct (Reasoning + Acting)</span>
+<a id="line-4" name="line-4"></a>
+<a id="line-5" name="line-5"></a>El patrón más básico para agentes que necesitan razonar y actuar en loop.
 <a id="line-6" name="line-6"></a>
-<a id="line-7" name="line-7"></a>FLUJO
-<a id="line-8" name="line-8"></a>Vas a esperar y solo respondera lo que te pregunto, no te puedes extendera explicar cosas que no pido o resolver preguntas, si crees que algo es relevante, debes preguntarme si quiero saber y decirme por que es importante, todo tu conocimiento se basa en documentacion real, nunca de tu propia guardad.
+<a id="line-7" name="line-7"></a><span class="gs">**Flujo:**</span>
+<a id="line-8" name="line-8"></a><span class="k">1.</span> THOUGHT → El modelo razona sobre qué hacer
+<a id="line-9" name="line-9"></a><span class="k">2.</span> ACTION → Ejecuta una tool/función
+<a id="line-10" name="line-10"></a><span class="k">3.</span> OBSERVATION → Recibe el resultado
+<a id="line-11" name="line-11"></a><span class="k">4.</span> (repite hasta tener respuesta final)
+<a id="line-12" name="line-12"></a>
+<a id="line-13" name="line-13"></a><span class="gu">## Plan+Execute</span>
+<a id="line-14" name="line-14"></a>
+<a id="line-15" name="line-15"></a>Para tareas complejas que necesitan planificar antes de ejecutar.
+<a id="line-16" name="line-16"></a>
+<a id="line-17" name="line-17"></a><span class="gu">## Tree of Thoughts</span>
+<a id="line-18" name="line-18"></a>
+<a id="line-19" name="line-19"></a>Explora múltiples ramas de razonamiento en paralelo.
+<a id="line-20" name="line-20"></a>
+<a id="line-21" name="line-21"></a><span class="gu">## Reflexión</span>
+<a id="line-22" name="line-22"></a>
+<a id="line-23" name="line-23"></a>El agente evalúa sus propias respuestas y se autocorrige.
 </pre></div></td></tr></table></div>
 </body>
 </html>

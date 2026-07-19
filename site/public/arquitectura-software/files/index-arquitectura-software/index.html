@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>quicshort.py - Learning</title>
+  <title>index-arquitectura-software.md - Learning</title>
   <style>
     body { font-family: system-ui, -apple-system, sans-serif; max-width: 1000px; margin: 0 auto; padding: 2rem; background: #fafafa; color: #18181b; }
     pre, code { font-family: 'Fira Mono', 'Cascadia Code', 'Courier New', monospace; font-size: 0.875rem; line-height: 1.5; }
@@ -16,11 +16,11 @@
   </style>
 </head>
 <body>
-  <a href="/algoritmia/" class="back">← Volver a algoritmia</a>
-  <h1>quicshort.py</h1>
+  <a href="/arquitectura-software/" class="back">← Volver a arquitectura-software</a>
+  <h1>index-arquitectura-software.md</h1>
   <p class="meta">
-    Lenguaje: <code>Python</code>
-    · Tamaño: <code>0.6 KB</code>
+    Lenguaje: <code>Markdown</code>
+    · Tamaño: <code>2.2 KB</code>
     · Solo lectura
   </p>
   <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
@@ -159,35 +159,37 @@ body .il { color: #AE81FF } /* Literal.Number.Integer.Long */
 <span class="normal"><a href="#line-26">26</a></span>
 <span class="normal"><a href="#line-27">27</a></span>
 <span class="normal"><a href="#line-28">28</a></span>
-<span class="normal"><a href="#line-29">29</a></span></pre></div></td><td class="code"><div><pre><span></span><a id="line-1" name="line-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
-<a id="line-2" name="line-2"></a><span class="n">n</span> <span class="o">=</span> <span class="mi">10000</span>
-<a id="line-3" name="line-3"></a>
-<a id="line-4" name="line-4"></a><span class="n">l</span> <span class="o">=</span> <span class="p">[]</span>
-<a id="line-5" name="line-5"></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-<a id="line-6" name="line-6"></a>    <span class="n">l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">9999</span><span class="p">)))</span>
+<span class="normal"><a href="#line-29">29</a></span>
+<span class="normal"><a href="#line-30">30</a></span></pre></div></td><td class="code"><div><pre><span></span><a id="line-1" name="line-1"></a><span class="gh"># Arquitectura de Software</span>
+<a id="line-2" name="line-2"></a>
+<a id="line-3" name="line-3"></a><span class="gs">**Creado:**</span> 30 May 2026
+<a id="line-4" name="line-4"></a><span class="gs">**Carpeta:**</span> arquitectura-software/
+<a id="line-5" name="line-5"></a>
+<a id="line-6" name="line-6"></a>---
 <a id="line-7" name="line-7"></a>
-<a id="line-8" name="line-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">quickshort</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
-<a id="line-9" name="line-9"></a>    <span class="n">_quickshort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<a id="line-10" name="line-10"></a>
-<a id="line-11" name="line-11"></a><span class="k">def</span><span class="w"> </span><span class="nf">_quickshort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">):</span>
-<a id="line-12" name="line-12"></a>    <span class="k">if</span> <span class="n">low</span> <span class="o">&lt;</span> <span class="n">high</span><span class="p">:</span>
-<a id="line-13" name="line-13"></a>        <span class="n">pivot</span> <span class="o">=</span> <span class="n">parttion</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
-<a id="line-14" name="line-14"></a>        <span class="n">_quickshort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">pivot</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<a id="line-15" name="line-15"></a>        <span class="n">_quickshort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">pivot</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
-<a id="line-16" name="line-16"></a>
-<a id="line-17" name="line-17"></a><span class="k">def</span><span class="w"> </span><span class="nf">parttion</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">):</span>
-<a id="line-18" name="line-18"></a>    <span class="n">pivot</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">high</span><span class="p">]</span>
-<a id="line-19" name="line-19"></a>    <span class="n">i</span> <span class="o">=</span> <span class="n">low</span>
-<a id="line-20" name="line-20"></a>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">):</span>
-<a id="line-21" name="line-21"></a>        <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">pivot</span><span class="p">:</span>
-<a id="line-22" name="line-22"></a>            <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
-<a id="line-23" name="line-23"></a>            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-<a id="line-24" name="line-24"></a>    <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">high</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">high</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-<a id="line-25" name="line-25"></a>    <span class="k">return</span> <span class="n">i</span>
-<a id="line-26" name="line-26"></a>    
-<a id="line-27" name="line-27"></a><span class="n">quickshort</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
-<a id="line-28" name="line-28"></a><span class="nb">print</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
-<a id="line-29" name="line-29"></a>        
+<a id="line-8" name="line-8"></a><span class="gu">## Archivos en este tema</span>
+<a id="line-9" name="line-9"></a>
+<a id="line-10" name="line-10"></a>| Archivo | Descripción |
+<a id="line-11" name="line-11"></a>|---|---|
+<a id="line-12" name="line-12"></a>| [<span class="nt">fundamentos-arquitectura.md</span>](<span class="na">./fundamentos-arquitectura.md</span>) | Contexto, responsabilidades, malas prácticas, patrones, comunicación |
+<a id="line-13" name="line-13"></a>| [<span class="nt">serendipia-en-arquitectura.md</span>](<span class="na">./serendipia-en-arquitectura.md</span>) | Cultivar innovación, AI como espejo del diseño, feedback |
+<a id="line-14" name="line-14"></a>| [<span class="nt">estilos-arquitectura.md</span>](<span class="na">./estilos-arquitectura.md</span>) | Progresión monolito → modular → microservicios → eventos |
+<a id="line-15" name="line-15"></a>| [<span class="nt">monolito.md</span>](<span class="na">./monolito.md</span>) | Qué es, ventajas, desventajas, noisy neighbor, cuándo considerarlo |
+<a id="line-16" name="line-16"></a>| [<span class="nt">arquitectura-orientada-servicios.md</span>](<span class="na">./arquitectura-orientada-servicios.md</span>) | Contratos, SOAP, OpenAPI, Swagger, WSDL, regla sin contrato no hay comunicación |
+<a id="line-17" name="line-17"></a>| [<span class="nt">arquitectura-orientada-eventos.md</span>](<span class="na">./arquitectura-orientada-eventos.md</span>) | Eventos, productores, consumidores, broker, DDD, consistencia eventual |
+<a id="line-18" name="line-18"></a>| [<span class="nt">microservicios.md</span>](<span class="na">./microservicios.md</span>) | Servicios independientes, contratos, costos, CQRS, comunicación síncrona/asíncrona |
+<a id="line-19" name="line-19"></a>| [<span class="nt">solid-principles.md</span>](<span class="na">./solid-principles.md</span>) | Los 5 principios SOLID con ejemplos en Python — SRP, OCP, LSP, ISP, DIP |
+<a id="line-20" name="line-20"></a>| [<span class="nt">ley-de-demeter.md</span>](<span class="na">./ley-de-demeter.md</span>) | Ley de Demeter — &quot;no hables con extraños&quot;, reducir el acoplamiento entre objetos |
+<a id="line-21" name="line-21"></a>| [<span class="nt">arquitectura-limpia.md</span>](<span class="na">./arquitectura-limpia.md</span>) | Círculos concéntricos, dependencias hacia adentro, entidades, casos de uso, adaptadores |
+<a id="line-22" name="line-22"></a>| [<span class="nt">cuando-usar-patrones.md</span>](<span class="na">./cuando-usar-patrones.md</span>) | Cuándo elegir un patrón, dominio primero, no reinventar la rueda, mezclar patrones |
+<a id="line-23" name="line-23"></a>| [<span class="nt">cliente-servidor-modalidad.md</span>](<span class="na">./cliente-servidor-modalidad.md</span>) | Cliente rico vs ligero, conexión bidireccional, fundamentos |
+<a id="line-24" name="line-24"></a>| [<span class="nt">share-nothing.md</span>](<span class="na">./share-nothing.md</span>) | Principio de no compartir estado entre componentes — DB, memoria, CPU propios |
+<a id="line-25" name="line-25"></a>| [<span class="nt">sharding.md</span>](<span class="na">./sharding.md</span>) | Particionar una base de datos grande en shards independientes |
+<a id="line-26" name="line-26"></a>| [<span class="nt">mapreduce.md</span>](<span class="na">./mapreduce.md</span>) | Patrón Map-Shuffle-Reduce para procesamiento distribuido de datos masivos |
+<a id="line-27" name="line-27"></a>
+<a id="line-28" name="line-28"></a>---
+<a id="line-29" name="line-29"></a>
+<a id="line-30" name="line-30"></a><span class="ge">*Documenta tu aprendizaje sobre arquitectura de software — desde fundamentos hasta patrones usados en la industria.*</span>
 </pre></div></td></tr></table></div>
 </body>
 </html>

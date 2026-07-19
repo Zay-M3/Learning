@@ -1,4 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 
 export type Post = CollectionEntry<'posts'>;
 
@@ -102,9 +104,9 @@ export async function getAllSessions(): Promise<Session[]> {
 }
 
 /**
- * Cuenta cuántos posts hay por sesión.
+ * Cuenta cuántos posts (markdowns) hay por sesión.
  */
-export async function getSessionCounts(): Promise<Record<Session, number>> {
+export async function getSessionPostCounts(): Promise<Record<Session, number>> {
   const posts = await getAllPosts();
   const counts = Object.fromEntries(
     SESSIONS.map((s) => [s, 0]),
@@ -113,6 +115,54 @@ export async function getSessionCounts(): Promise<Record<Session, number>> {
     counts[post.data.session]++;
   }
   return counts;
+}
+
+/**
+ * Cuenta cuántos assets (notebooks + archivos de código) hay por sesión,
+ * leyendo los `_index.json` que genera `scripts/assets.py` durante el build.
+ */
+export async function getSessionAssetCounts(): Promise<Record<Session, number>> {
+  const counts = Object.fromEntries(
+    SESSIONS.map((s) => [s, 0]),
+  ) as Record<Session, number>;
+
+  // `process.cwd()` durante el build es la raíz del proyecto Astro
+  // (donde están `astro.config.mjs`, `package.json`, `public/`).
+  const projectRoot = process.cwd();
+
+  await Promise.all(
+    SESSIONS.map(async (s) => {
+      try {
+        const path = resolve(projectRoot, 'public', s, '_index.json');
+        const raw = await readFile(path, 'utf8');
+        const data = JSON.parse(raw);
+        if (Array.isArray(data)) counts[s] = data.length;
+      } catch {
+        // No _index.json → 0 assets (sesión sin notebooks/files)
+      }
+    }),
+  );
+
+  return counts;
+}
+
+/**
+ * Cuenta el total combinado (posts + assets) por sesión.
+ * Es lo que se muestra en la home: "X notas" donde X incluye tanto
+ * markdowns como notebooks/archivos de código.
+ */
+export async function getSessionCounts(): Promise<Record<Session, number>> {
+  const [posts, assets] = await Promise.all([
+    getSessionPostCounts(),
+    getSessionAssetCounts(),
+  ]);
+  const total = Object.fromEntries(
+    SESSIONS.map((s) => [s, 0]),
+  ) as Record<Session, number>;
+  for (const s of SESSIONS) {
+    total[s] = posts[s] + assets[s];
+  }
+  return total;
 }
 
 /**

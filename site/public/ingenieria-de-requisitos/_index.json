@@ -1,0 +1,79 @@
+[
+  {
+    "type": "file",
+    "slug": "criterios-de-aceptacion",
+    "title": "Criterios De Aceptacion",
+    "filename": "criterios-de-aceptacion.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/ingenieria-de-requisitos/files/criterios-de-aceptacion/",
+    "size_kb": 8.5,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "ejemplos-extraccion",
+    "title": "Ejemplos Extraccion",
+    "filename": "ejemplos-extraccion.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/ingenieria-de-requisitos/files/ejemplos-extraccion/",
+    "size_kb": 4.8,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "historias-de-usuario",
+    "title": "Historias De Usuario",
+    "filename": "historias-de-usuario.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/ingenieria-de-requisitos/files/historias-de-usuario/",
+    "size_kb": 1.8,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "index-ingenieria-de-requisitos",
+    "title": "Index Ingenieria De Requisitos",
+    "filename": "index-ingenieria-de-requisitos.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/ingenieria-de-requisitos/files/index-ingenieria-de-requisitos/",
+    "size_kb": 0.8,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "principios-fundamentales",
+    "title": "Principios Fundamentales",
+    "filename": "principios-fundamentales.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/ingenieria-de-requisitos/files/principios-fundamentales/",
+    "size_kb": 3.8,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "priorizacion-de-requisitos",
+    "title": "Priorizacion De Requisitos",
+    "filename": "priorizacion-de-requisitos.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/ingenieria-de-requisitos/files/priorizacion-de-requisitos/",
+    "size_kb": 3.3,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "tecnicas-de-elicitacion",
+    "title": "Tecnicas De Elicitacion",
+    "filename": "tecnicas-de-elicitacion.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/ingenieria-de-requisitos/files/tecnicas-de-elicitacion/",
+    "size_kb": 3.6,
+    "extension": ".md"
+  }
+]

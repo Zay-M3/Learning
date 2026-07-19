@@ -1,0 +1,24 @@
+[
+  {
+    "type": "file",
+    "slug": "index-ingenieria-de-software",
+    "title": "Index Ingenieria De Software",
+    "filename": "index-ingenieria-de-software.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/ingenieria-de-software/files/index-ingenieria-de-software/",
+    "size_kb": 0.3,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "politicas-de-pr",
+    "title": "Politicas De Pr",
+    "filename": "politicas-de-pr.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/ingenieria-de-software/files/politicas-de-pr/",
+    "size_kb": 7.9,
+    "extension": ".md"
+  }
+]

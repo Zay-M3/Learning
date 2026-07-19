@@ -1,0 +1,145 @@
+[
+  {
+    "type": "file",
+    "slug": "background-task-ack-whatsapp-webhook",
+    "title": "Background Task Ack Whatsapp Webhook",
+    "filename": "background-task-ack-whatsapp-webhook.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/agentes-ia/files/background-task-ack-whatsapp-webhook/",
+    "size_kb": 4.8,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "creacion-agente-variables",
+    "title": "Creacion Agente Variables",
+    "filename": "creacion-agente-variables.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/agentes-ia/files/creacion-agente-variables/",
+    "size_kb": 1.4,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "herramientas-agente",
+    "title": "Herramientas Agente",
+    "filename": "herramientas-agente.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/agentes-ia/files/herramientas-agente/",
+    "size_kb": 6.7,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "index-elevenlabs",
+    "title": "Index Elevenlabs",
+    "filename": "index-elevenlabs.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/agentes-ia/files/index-elevenlabs/",
+    "size_kb": 0.9,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "lanzar-llamada-saliente",
+    "title": "Lanzar Llamada Saliente",
+    "filename": "lanzar-llamada-saliente.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/agentes-ia/files/lanzar-llamada-saliente/",
+    "size_kb": 3.4,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "override-sdk-ui",
+    "title": "Override Sdk Ui",
+    "filename": "override-sdk-ui.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/agentes-ia/files/override-sdk-ui/",
+    "size_kb": 3.2,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "recibir-resultado",
+    "title": "Recibir Resultado",
+    "filename": "recibir-resultado.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/agentes-ia/files/recibir-resultado/",
+    "size_kb": 3.5,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "variables-dinamicas",
+    "title": "Variables Dinamicas",
+    "filename": "variables-dinamicas.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/agentes-ia/files/variables-dinamicas/",
+    "size_kb": 4.1,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "index-agentes-ia",
+    "title": "Index Agentes Ia",
+    "filename": "index-agentes-ia.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/agentes-ia/files/index-agentes-ia/",
+    "size_kb": 1.1,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "patrones-fundamentales",
+    "title": "Patrones Fundamentales",
+    "filename": "patrones-fundamentales.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/agentes-ia/files/patrones-fundamentales/",
+    "size_kb": 0.6,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "patrones-system-prompt",
+    "title": "Patrones System Prompt",
+    "filename": "patrones-system-prompt.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/agentes-ia/files/patrones-system-prompt/",
+    "size_kb": 3.9,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "rewoo-pattern",
+    "title": "Rewoo Pattern",
+    "filename": "rewoo-pattern.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/agentes-ia/files/rewoo-pattern/",
+    "size_kb": 5.3,
+    "extension": ".md"
+  },
+  {
+    "type": "file",
+    "slug": "seguridad-agentes-ia",
+    "title": "Seguridad Agentes Ia",
+    "filename": "seguridad-agentes-ia.md",
+    "language": "markdown",
+    "lexer": "markdown",
+    "url": "/agentes-ia/files/seguridad-agentes-ia/",
+    "size_kb": 6.4,
+    "extension": ".md"
+  }
+]
