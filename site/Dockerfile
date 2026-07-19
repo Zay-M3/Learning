@@ -15,6 +15,9 @@ RUN pip3 install --no-cache-dir --break-system-packages \
 WORKDIR /app
 
 # Copiar dependencias primero (mejor cache de Docker)
+# Importante: pnpm-workspace.yaml debe ir ANTES de package.json para que
+# onlyBuiltDependencies (esbuild, sharp) se respeten durante pnpm install.
+COPY site/pnpm-workspace.yaml site/.npmrc ./
 COPY site/package.json site/pnpm-lock.yaml* ./
 RUN pnpm install --frozen-lockfile || pnpm install
 
