@@ -21,6 +21,7 @@ const SESSIONS = [
   'algoritmia',
   'ingenieria-de-requisitos',
   'ingenieria-de-software',
+  'Dominios',
 ];
 
 async function main() {

@@ -31,6 +31,7 @@ COPY agentes-ia/ /repo-sessions/agentes-ia/
 COPY algoritmia/ /repo-sessions/algoritmia/
 COPY ingenieria-de-requisitos/ /repo-sessions/ingenieria-de-requisitos/
 COPY ingenieria-de-software/ /repo-sessions/ingenieria-de-software/
+COPY Dominios/ /repo-sessions/Dominios/
 
 # Variable de entorno: sync-content.mjs usa esto como REPO_ROOT alternativo
 ENV LEARNING_REPO_ROOT=/repo-sessions
