@@ -1,3 +1,8 @@
+---
+session: Dominios
+title: "Three-Way Matching (3WM)"
+---
+
 # 03 · Three-Way Matching (3WM)
 
 > **El control antifraude clásico del P2P.** Por qué existe, cómo funciona, cómo lo implementan SAP/Odoo/ERPNext.

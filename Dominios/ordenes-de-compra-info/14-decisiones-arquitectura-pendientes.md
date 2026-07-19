@@ -1,3 +1,8 @@
+---
+session: Dominios
+title: "Decisiones de arquitectura pendientes"
+---
+
 # 14 · Decisiones de arquitectura pendientes
 
 > **Las 8 decisiones críticas que hay que tomar ANTES de implementar.** Cada una impacta significativamente el diseño técnico.

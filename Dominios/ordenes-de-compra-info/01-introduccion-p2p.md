@@ -1,3 +1,8 @@
+---
+session: Dominios
+title: "Introducción al ciclo Purchase-to-Pay (P2P)"
+---
+
 # 01 · Introducción al ciclo Purchase-to-Pay (P2P)
 
 > **Qué es P2P, por qué existe, qué vocabulario usaremos en el resto de la documentación.**

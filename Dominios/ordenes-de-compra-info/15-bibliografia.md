@@ -1,3 +1,8 @@
+---
+session: Dominios
+title: "Bibliografía — Fuentes oficiales verificadas"
+---
+
 # 15 · Bibliografía — Fuentes oficiales verificadas
 
 > **Todos los links utilizados para validar la documentación.** Fuentes oficiales, Wikipedia en español/inglés, documentación de AEAT, esquemas abiertos.

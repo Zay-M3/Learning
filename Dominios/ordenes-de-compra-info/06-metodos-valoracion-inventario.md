@@ -1,3 +1,8 @@
+---
+session: Dominios
+title: "Métodos de valoración de inventario"
+---
+
 # 06 · Métodos de valoración de inventario
 
 > **Cómo se calcula el precio del stock.** FIFO, LIFO, Weighted Average y Standard Cost con ejemplos numéricos.

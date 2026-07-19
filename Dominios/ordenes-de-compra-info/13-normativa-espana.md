@@ -1,3 +1,8 @@
+---
+session: Dominios
+title: "Normativa España (AEAT, IVA, factura electrónica)"
+---
+
 # 13 · Normativa España (AEAT, IVA, factura electrónica)
 
 > **Lo que tu CRM debe conocer específicamente para operar en España.** Ley Crea y Crece, VeriFactu, TicketBAI, SII, Facturae, PGC.

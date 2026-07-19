@@ -1,3 +1,8 @@
+---
+session: Dominios
+title: "Tolerancia de discrepancia <2%"
+---
+
 # 10 · Tolerancia de discrepancia <2%
 
 > **Cómo se calcula, dónde se aplica, qué pasa con los edge cases.**

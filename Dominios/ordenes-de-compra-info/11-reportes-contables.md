@@ -1,3 +1,8 @@
+---
+session: Dominios
+title: "Reportes contables (PGC España)"
+---
+
 # 11 · Reportes contables (PGC España)
 
 > **Qué libros y reportes necesita un contable en España** cuando tiene un CRM con módulo de compras. Asientos, libros oficiales, IVA.

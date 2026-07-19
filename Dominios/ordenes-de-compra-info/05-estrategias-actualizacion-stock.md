@@ -1,3 +1,8 @@
+---
+session: Dominios
+title: "Estrategias de actualización de stock"
+---
+
 # 05 · Estrategias de actualización de stock
 
 > **Cuándo se actualiza el stock en el sistema.** Las 4 estrategias que usa la industria, con pros/cons y ejemplos por sector.

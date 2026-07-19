@@ -1,3 +1,8 @@
+---
+session: Dominios
+title: "Estados de la Purchase Order"
+---
+
 # 04 · Estados de la Purchase Order
 
 > **Lifecycle completo de la PO** desde borrador hasta cierre, con comparación entre SAP / Odoo / ERPNext / NetSuite.

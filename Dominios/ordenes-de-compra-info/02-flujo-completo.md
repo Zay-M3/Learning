@@ -1,3 +1,8 @@
+---
+session: Dominios
+title: "Flujo completo P2P paso a paso"
+---
+
 # 02 · Flujo completo P2P paso a paso
 
 > **Walkthrough con ejemplo numérico completo**, desde que Carlos crea la PO hasta que Laura contabiliza la factura.

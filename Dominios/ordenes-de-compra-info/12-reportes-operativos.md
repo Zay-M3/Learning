@@ -1,3 +1,8 @@
+---
+session: Dominios
+title: "Reportes operativos (KPIs y dashboards)"
+---
+
 # 12 · Reportes operativos (KPIs y dashboards)
 
 > **Lo que necesita Carlos (Compras) y Ana (Almacén)** para operar el día a día. Dashboards, alertas, KPIs.

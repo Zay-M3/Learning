@@ -1,3 +1,8 @@
+---
+session: Dominios
+title: "Formatos de exportación de Purchase Order"
+---
+
 # 07 · Formatos de exportación de Purchase Order
 
 > **PDF, XLSX, CSV, XML, UBL, PEPPOL, Facturae.** Cuál soporta qué proveedor, cuándo usar cada uno.

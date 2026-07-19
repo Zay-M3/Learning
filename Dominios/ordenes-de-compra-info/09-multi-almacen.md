@@ -1,3 +1,8 @@
+---
+session: Dominios
+title: "Multi-almacén"
+---
+
 # 09 · Multi-almacén
 
 > **Cómo estructurar múltiples warehouses, ubicaciones físicas dentro de cada uno, transferencias internas.**

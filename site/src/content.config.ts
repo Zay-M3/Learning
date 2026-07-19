@@ -14,6 +14,7 @@ const posts = defineCollection({
       'algoritmia',
       'ingenieria-de-requisitos',
       'ingenieria-de-software',
+      'Dominios',
     ]),
     tags: z.array(z.string()).default([]),
     date: z.date().optional(),

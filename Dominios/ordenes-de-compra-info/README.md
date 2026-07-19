@@ -1,3 +1,8 @@
+---
+session: Dominios
+title: "Dominios · Órdenes de Compra"
+---
+
 # Dominios · Órdenes de Compra
 
 > Documentación de dominio sobre el ciclo **Purchase-to-Pay (P2P)** aplicado a un CRM interno español, previo a cualquier implementación.

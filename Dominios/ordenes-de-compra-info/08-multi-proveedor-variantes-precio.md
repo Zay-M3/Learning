@@ -1,3 +1,8 @@
+---
+session: Dominios
+title: "Multi-proveedor con variantes de precio"
+---
+
 # 08 · Multi-proveedor con variantes de precio
 
 > **Mismo producto, distintos proveedores, distintos precios.** Cómo se modela, cómo se elige proveedor, cómo se calcula el coste.
